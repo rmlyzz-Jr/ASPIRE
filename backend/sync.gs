@@ -66,7 +66,7 @@ function syncToBinamarga(ss, rowData, headers, kodeLaporan) {
     }
     
     if (!isDisposisiBinamarga(disposisiValue)) {
-        console.log(`⏭️ Dilewati (bukan Binamarga): ${kodeLaporan}`);
+        console.log('⏭️ Dilewati (bukan Binamarga): ' + kodeLaporan);
         return;
     }
     
@@ -121,6 +121,19 @@ function syncToBinamarga(ss, rowData, headers, kodeLaporan) {
     binSheet.autoResizeColumns(1, desiredHeaders.length);
     
     syncToBackupBinamarga(rowData, headers, kodeLaporan);
+}
+
+function deleteFromBackup(kodeLaporan) {
+    try {
+        const backupSs = SpreadsheetApp.openById(SPREADSHEET_BACKUP_ID);
+        const backupBinSheet = backupSs.getSheetByName(SHEET_BINAMARGA);
+        if (backupBinSheet) {
+            deleteRowByKode(backupBinSheet, kodeLaporan);
+            console.log('🗑️ Dihapus dari BACKUP: ' + kodeLaporan);
+        }
+    } catch (e) {
+        console.error('❌ Gagal hapus dari backup:', e.message);
+    }
 }
 
 function resyncAllToBinamargaBatch() {
@@ -230,7 +243,7 @@ function resyncAllToBinamargaBatch() {
                     
                 } catch (e) {
                     totalErrors++;
-                    console.error(`❌ Error:`, e.message);
+                    console.error('❌ Error:', e.message);
                 }
             }
             
@@ -241,7 +254,7 @@ function resyncAllToBinamargaBatch() {
         
         return {
             success: true,
-            message: `✅ Resync selesai!\n📥 Data baru: ${totalNew}\n🔄 Data diupdate: ${totalUpdated}\n❌ Error: ${totalErrors}`,
+            message: '✅ Resync selesai!\n📥 Data baru: ' + totalNew + '\n🔄 Data diupdate: ' + totalUpdated + '\n❌ Error: ' + totalErrors,
             newData: totalNew,
             updatedData: totalUpdated,
             errors: totalErrors,
@@ -253,22 +266,40 @@ function resyncAllToBinamargaBatch() {
     }
 }
 
-function resyncAllToBinamargaBatchWithProgress() {
-    const ui = SpreadsheetApp.getUi();
-    const response = ui.alert(
-        '⚠️ Konfirmasi Resync Batch',
-        'Proses ini akan menyinkronkan semua data BINAMARGA secara bertahap (50 data per batch).\n\n' +
-        '⚠️ Proses bisa memakan waktu 10-20 menit tergantung jumlah data.\n' +
-        '⚠️ Jangan tutup spreadsheet selama proses berjalan.\n\n' +
-        'Lanjutkan?',
-        ui.ButtonSet.YES_NO
-    );
-    
-    if (response !== ui.Button.YES) {
-        return { success: false, message: 'Dibatalkan oleh user' };
+function resyncAllToBackup() {
+    try {
+        const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+        const sourceSheet = ss.getSheetByName(SHEET_BINAMARGA);
+        
+        if (!sourceSheet) {
+            return { success: false, message: 'Sheet BINAMARGA tidak ditemukan' };
+        }
+        
+        if (sourceSheet.getLastRow() <= 1) {
+            return { success: true, message: 'Tidak ada data di BINAMARGA' };
+        }
+        
+        const data = sourceSheet.getDataRange().getValues();
+        const headers = data[0];
+        let count = 0;
+        
+        for (let i = 1; i < data.length; i++) {
+            const row = data[i];
+            const kodeLaporan = row[1];
+            if (kodeLaporan) {
+                syncToBackupBinamarga(row, headers, kodeLaporan);
+                count++;
+            }
+        }
+        
+        return {
+            success: true,
+            message: '✅ ' + count + ' data berhasil disinkronisasi ke BACKUP',
+            totalData: count
+        };
+        
+    } catch (e) {
+        console.error('❌ Error resyncAllToBackup:', e.message);
+        return { success: false, message: 'Error: ' + e.message };
     }
-    
-    const result = resyncAllToBinamargaBatch();
-    ui.alert('✅ Hasil Resync', result.message, ui.ButtonSet.OK);
-    return result;
 }
