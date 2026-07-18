@@ -44,15 +44,6 @@ function getMentionListByDisposisi(disposisiValue) {
     }
 }
 
-function normalizeMentionsArray(mentionsInput) {
-    if (!mentionsInput) return [];
-    if (Array.isArray(mentionsInput)) {
-        return mentionsInput.map(n => ('' + n).replace(/@s\.whatsapp\.net$/i, '').trim()).filter(n => n);
-    }
-    const s = '' + mentionsInput;
-    return s.split(',').map(n => n.trim()).filter(n => n).map(n => n.replace(/@s\.whatsapp\.net$/i, ''));
-}
-
 function formatWAMessageWithMention(data, kodeLaporan, keyword, mentionNumbers) {
     if (!data) {
         return {
@@ -163,23 +154,6 @@ function sendToWhatsAppGroup(groupId, pesan, mentionList, imageUrl) {
     }
 }
 
-function sendUrgentNotificationWeb(data) {
-    try {
-        const pesan = data.pesan || '';
-        if (!pesan) return { success: false, message: 'Pesan tidak boleh kosong' };
-        const result = sendToWhatsAppGroup(WA_GROUP_ID, pesan, [DEFAULT_MENTION], null);
-        return {
-            success: true,
-            waSent: result.success,
-            message: result.message || 'OK',
-            data: result
-        };
-    } catch (e) {
-        console.error('❌ Error sendUrgentNotificationWeb:', e.message);
-        return { success: false, message: e.toString() };
-    }
-}
-
 function getAllWAConfigWeb() {
     try {
         ensureSheetsExist();
@@ -200,5 +174,79 @@ function getAllWAConfigWeb() {
         return { success: true, data: list };
     } catch (e) {
         return { success: false, data: [], message: e.toString() };
+    }
+}
+
+function sendUrgentNotificationWeb(data) {
+    try {
+        const pesan = data.pesan || '';
+        if (!pesan) return { success: false, message: 'Pesan tidak boleh kosong' };
+        const result = sendToWhatsAppGroup(WA_GROUP_ID, pesan, [DEFAULT_MENTION], null);
+        console.log('📨 Notifikasi URGENT dikirim:', result);
+        return {
+            success: true,
+            waSent: result.success,
+            message: result.message || 'OK',
+            data: result
+        };
+    } catch (e) {
+        console.error('❌ Error sendUrgentNotificationWeb:', e.message);
+        return { success: false, message: e.toString() };
+    }
+}
+
+// ==================== IMAGE UPLOAD FUNCTIONS ====================
+
+function uploadImageToDrive(base64Image, kodeLaporan) {
+    try {
+        if (!base64Image) return null;
+        console.log('📸 Memulai upload gambar untuk:', kodeLaporan);
+        const folderName = "SIPU_Laporan_Aduan_Gambar";
+        let folder;
+        const folderIterator = DriveApp.getFoldersByName(folderName);
+        if (folderIterator.hasNext()) folder = folderIterator.next();
+        else folder = DriveApp.createFolder(folderName);
+        let base64Data = base64Image;
+        let contentType = 'image/jpeg';
+        const match = base64Image.match(/^data:(image\/[a-zA-Z0-9.+-]+);base64,(.*)$/);
+        if (match) { contentType = match[1]; base64Data = match[2]; }
+        const raw = Utilities.base64Decode(base64Data);
+        const ext = (contentType.split('/')[1] || 'jpg').split('+')[0];
+        const fileName = kodeLaporan + '_' + new Date().getTime() + '.' + ext;
+        const imageBlob = Utilities.newBlob(raw, contentType, fileName);
+        const file = folder.createFile(imageBlob);
+        file.setDescription('Gambar laporan aduan SIPU - ' + kodeLaporan);
+        try { file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW); } catch (e) {}
+        const fileId = file.getId();
+        const imageUrl = 'https://drive.google.com/uc?export=download&id=' + fileId;
+        console.log('✅ Gambar berhasil diupload. ID:', fileId);
+        return imageUrl;
+    } catch (e) {
+        console.error('❌ Error upload gambar ke Drive:', e.toString());
+        return null;
+    }
+}
+
+function getImagesFromDriveWeb(data) {
+    try {
+        const folderName = "SIPU_Laporan_Aduan_Gambar";
+        let folder;
+        const folderIterator = DriveApp.getFoldersByName(folderName);
+        if (!folderIterator.hasNext()) return { success: false, message: 'Folder tidak ditemukan' };
+        folder = folderIterator.next();
+        const files = folder.getFiles();
+        const imageUrls = [];
+        while (files.hasNext()) {
+            const file = files.next();
+            if (file.getName().startsWith(data.kodeLaporan)) {
+                const fileId = file.getId();
+                const imageUrl = 'https://drive.google.com/uc?export=download&id=' + fileId;
+                imageUrls.push(imageUrl);
+            }
+        }
+        if (imageUrls.length === 0) return { success: false, message: 'Gambar tidak ditemukan' };
+        return { success: true, imageUrls: imageUrls, totalImages: imageUrls.length };
+    } catch (e) {
+        return { success: false, message: e.toString() };
     }
 }
