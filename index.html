@@ -460,6 +460,93 @@
         .install-banner .actions .install-btn:hover { background: #6366F1; transform: scale(1.05); }
         .install-banner .actions .close-btn { background: transparent; color: rgba(255,255,255,0.5); font-size: 18px; padding: 8px 12px; }
         .install-banner .actions .close-btn:hover { color: white; }
+        
+        /* ===== AUTO LOGOUT TIMER ===== */
+        #inactivityTimerDisplay {
+            font-size: 11px;
+            opacity: 0.8;
+            background: rgba(255,255,255,0.15);
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: 8px;
+            font-weight: 500;
+            min-width: 70px;
+            justify-content: center;
+        }
+        #inactivityTimerDisplay i {
+            font-size: 12px;
+        }
+        #inactivityTimerDisplay .timer-text {
+            font-variant-numeric: tabular-nums;
+        }
+        #inactivityTimerDisplay.warning {
+            background: rgba(245, 158, 11, 0.3);
+            color: #FCD34D;
+        }
+        #inactivityTimerDisplay.danger {
+            background: rgba(239, 68, 68, 0.3);
+            color: #FCA5A5;
+            animation: pulseTimer 1s ease infinite;
+        }
+        @keyframes pulseTimer {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        /* ===== AUTO LOGOUT NOTIFICATION ===== */
+        #autoLogoutNotification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #EF4444;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(239,68,68,0.3);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Inter', sans-serif;
+            animation: slideDownNotif 0.5s ease;
+            max-width: 90%;
+        }
+        #autoLogoutNotification .notif-icon {
+            font-size: 24px;
+        }
+        #autoLogoutNotification .notif-content {
+            flex: 1;
+        }
+        #autoLogoutNotification .notif-title {
+            font-weight: 700;
+            font-size: 14px;
+        }
+        #autoLogoutNotification .notif-message {
+            margin: 4px 0 0 0;
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        #autoLogoutNotification .notif-close {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        #autoLogoutNotification .notif-close:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        @keyframes slideDownNotif {
+            from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
     </style>
 </head>
 <body>
@@ -526,8 +613,7 @@
             <div class="login-footer"><i class="fas fa-dragon"></i> By Rmlyzz</div>
         </div>
     </div>
-
-    <!-- ===== MAIN CONTENT ===== -->
+        <!-- ===== MAIN CONTENT ===== -->
     <div id="mainContent" style="display:none;">
         <div class="bg-animation" id="bgAnimation"></div>
         <div class="container">
@@ -544,7 +630,10 @@
                     </div>
                     <div class="user-info-card" id="userInfoCard">
                         <div class="user-avatar" id="userAvatar">A</div>
-                        <div class="user-detail"><div class="user-name" id="userName">Loading...</div><div class="user-role" id="userRole">-</div></div>
+                        <div class="user-detail">
+                            <div class="user-name" id="userName">Loading...</div>
+                            <div class="user-role" id="userRole">-</div>
+                        </div>
                         <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Keluar</button>
                     </div>
                 </div>
@@ -558,7 +647,8 @@
                 <button class="tab-btn" data-tab="analytics"><i class="fas fa-chart-line"></i> Analytics & Prediction</button>
                 <button class="tab-btn" id="adminTabBtn" data-tab="admin" style="display:none;"><i class="fas fa-users-cog"></i> Kelola User</button>
             </div>
-                        <!-- ===== FORM TAB ===== -->
+
+            <!-- ===== FORM TAB ===== -->
             <div id="formTab" class="tab-content active">
                 <div class="form-section-title"><i class="fas fa-file-alt"></i><span>Form Laporan Aduan Baru</span>
                     <span style="margin-left:auto; font-size:12px; background:#25D36620; padding:6px 12px; border-radius:20px;"><i class="fab fa-whatsapp"></i> Akan dikirim ke WA Group DPU</span>
@@ -1045,6 +1135,11 @@
         { nama: "Candisari", lat: -7.0217, lng: 110.4214, aduan: 0, kategori: "Perumahan", icon: "🏘️", luas: "6.54 km²", populasi: "90,000" },
         { nama: "Gajahmungkur", lat: -7.0033, lng: 110.4042, aduan: 0, kategori: "Perkotaan", icon: "🏙️", luas: "9.07 km²", populasi: "85,000" }
     ];
+
+    // ==================== AUTO LOGOUT 30 MENIT ====================
+    var INACTIVITY_TIMEOUT = 30 * 60 * 1000;
+    var inactivityTimer = null;
+    var lastActivityTime = Date.now();
 
     // ==================== TOGGLE PASSWORD ====================
     function togglePasswordVisibility() {
@@ -1798,6 +1893,11 @@
         document.getElementById('userRole').innerHTML = currentUser.role;
         document.getElementById('adminTabBtn').style.display = currentUser.role === 'ADMIN' ? 'flex' : 'none';
         
+        // 🔥 START AUTO LOGOUT TIMER
+        resetInactivityTimer();
+        addTimerToHeader();
+        setupActivityTracking();
+        
         loadMasterData();
         loadAllLaporanData();
         loadUserList();
@@ -1813,12 +1913,23 @@
     }
 
     function logout() {
+        // Hapus timer
+        if (inactivityTimer) {
+            clearTimeout(inactivityTimer);
+            inactivityTimer = null;
+        }
+        
         sessionStorage.removeItem('sipu_user');
         currentUser = null;
+        
         document.getElementById('loginContainer').style.display = 'flex';
         document.getElementById('mainContent').style.display = 'none';
         document.getElementById('loginUsername').value = '';
         document.getElementById('loginPassword').value = '';
+        
+        // Hapus timer display
+        var timerEl = document.getElementById('inactivityTimerDisplay');
+        if (timerEl) timerEl.remove();
     }
 
     function checkSession() {
@@ -1839,6 +1950,10 @@
                 loadKeywordsFromGAS();
                 if (typeof loadGoogleMaps === 'function') loadGoogleMaps();
                 createBubbles();
+                // 🔥 START AUTO LOGOUT TIMER
+                resetInactivityTimer();
+                addTimerToHeader();
+                setupActivityTracking();
             } catch (e) {
                 console.error('Error loading session:', e);
                 sessionStorage.removeItem('sipu_user');
@@ -1846,6 +1961,122 @@
         } else {
             setupEnterKeyLogin();
             setupAutoFocus();
+        }
+    }
+
+    // ==================== AUTO LOGOUT FUNCTIONS ====================
+    function isUserLoggedIn() {
+        try {
+            var saved = sessionStorage.getItem('sipu_user');
+            if (saved) {
+                var user = JSON.parse(saved);
+                return user && user.username;
+            }
+        } catch(e) {}
+        return false;
+    }
+
+    function resetInactivityTimer() {
+        lastActivityTime = Date.now();
+        if (inactivityTimer) {
+            clearTimeout(inactivityTimer);
+            inactivityTimer = null;
+        }
+        if (!isUserLoggedIn()) return;
+        inactivityTimer = setTimeout(function() {
+            var elapsed = Date.now() - lastActivityTime;
+            if (elapsed >= INACTIVITY_TIMEOUT) {
+                console.log('⏰ Auto logout: Tidak ada aktivitas selama 30 menit');
+                performAutoLogout();
+            } else {
+                var remaining = INACTIVITY_TIMEOUT - elapsed;
+                inactivityTimer = setTimeout(arguments.callee, remaining);
+            }
+        }, INACTIVITY_TIMEOUT);
+        updateInactivityDisplay();
+    }
+
+    function performAutoLogout() {
+        showAutoLogoutNotification();
+        logout();
+    }
+
+    function showAutoLogoutNotification() {
+        var notification = document.createElement('div');
+        notification.id = 'autoLogoutNotification';
+        notification.innerHTML = `
+            <div style="display:flex; align-items:center; gap:12px; width:100%;">
+                <span style="font-size:24px;">⏰</span>
+                <div style="flex:1;">
+                    <div style="font-weight:700; font-size:14px;">Sesi Berakhir</div>
+                    <div style="margin:4px 0 0 0; font-size:13px; opacity:0.9;">
+                        Anda telah logout otomatis karena tidak ada aktivitas selama 30 menit.
+                    </div>
+                </div>
+                <button onclick="this.parentElement.parentElement.remove()" style="background:rgba(255,255,255,0.2);border:none;color:white;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:16px;">×</button>
+            </div>
+        `;
+        document.body.appendChild(notification);
+        setTimeout(function() {
+            var el = document.getElementById('autoLogoutNotification');
+            if (el) {
+                el.style.opacity = '0';
+                el.style.transition = 'opacity 0.5s';
+                setTimeout(function() { el.remove(); }, 500);
+            }
+        }, 5000);
+    }
+
+    function updateInactivityDisplay() {
+        var timerEl = document.getElementById('timerText');
+        if (timerEl && isUserLoggedIn()) {
+            var elapsed = Date.now() - lastActivityTime;
+            var remaining = Math.max(0, (INACTIVITY_TIMEOUT - elapsed) / 1000);
+            var minutes = Math.floor(remaining / 60);
+            var seconds = Math.floor(remaining % 60);
+            timerEl.textContent = minutes + ':' + String(seconds).padStart(2, '0');
+            
+            var container = document.getElementById('inactivityTimerDisplay');
+            if (container) {
+                container.classList.remove('warning', 'danger');
+                if (remaining < 60) {
+                    container.classList.add('danger');
+                } else if (remaining < 300) {
+                    container.classList.add('warning');
+                }
+            }
+        }
+    }
+
+    function trackUserActivity() {
+        if (isUserLoggedIn()) {
+            resetInactivityTimer();
+        }
+    }
+
+    function setupActivityTracking() {
+        var events = ['click', 'mousemove', 'keydown', 'scroll', 'touchstart', 'touchmove', 'wheel', 'resize'];
+        events.forEach(function(eventName) {
+            document.addEventListener(eventName, trackUserActivity, { passive: true });
+        });
+        document.addEventListener('input', trackUserActivity, { passive: true });
+        document.addEventListener('change', trackUserActivity, { passive: true });
+    }
+
+    function addTimerToHeader() {
+        var userInfoCard = document.getElementById('userInfoCard');
+        if (userInfoCard && isUserLoggedIn()) {
+            var existingTimer = document.getElementById('inactivityTimerDisplay');
+            if (existingTimer) return;
+            
+            var timerSpan = document.createElement('span');
+            timerSpan.id = 'inactivityTimerDisplay';
+            timerSpan.innerHTML = '<i class="fas fa-clock"></i> <span class="timer-text" id="timerText">30:00</span>';
+            userInfoCard.appendChild(timerSpan);
+            
+            setInterval(function() {
+                updateInactivityDisplay();
+            }, 1000);
         }
     }
 
@@ -4372,7 +4603,24 @@
                 btn._listenerAdded = true;
             }
         });
+        
+        // Auto logout timer update setiap detik
+        setInterval(function() {
+            updateInactivityDisplay();
+        }, 1000);
     });
+
+    // ==================== OVERRIDE LOGOUT UNTUK AUTO LOGOUT ====================
+    var originalLogout = logout;
+    logout = function() {
+        if (inactivityTimer) {
+            clearTimeout(inactivityTimer);
+            inactivityTimer = null;
+        }
+        var timerEl = document.getElementById('inactivityTimerDisplay');
+        if (timerEl) timerEl.remove();
+        originalLogout();
+    };
     </script>
 </body>
 </html>
