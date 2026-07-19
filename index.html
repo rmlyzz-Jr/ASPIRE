@@ -18,7 +18,7 @@
     <meta name="msapplication-TileImage" content="https://i.ibb.co.com/qMvmKCkH/aspire.png">
     
     <!-- ==================== FONT & ICON ==================== -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <!-- ==================== STYLE ==================== -->
@@ -78,7 +78,7 @@
         .container {
             position: relative;
             z-index: 10;
-            max-width: 600px;
+            max-width: 500px;
             width: 100%;
             animation: fadeInUp 0.8s ease;
         }
@@ -99,16 +99,13 @@
             border: 1px solid rgba(255,255,255,0.1);
             transition: all 0.3s ease;
         }
-        
         .card:hover {
             box-shadow: 0 40px 80px -20px rgba(79,70,229,0.3);
             transform: translateY(-4px);
         }
         
         /* ===== LOGO ===== */
-        .logo {
-            margin-bottom: 24px;
-        }
+        .logo { margin-bottom: 24px; }
         .logo img {
             width: 120px;
             height: 120px;
@@ -119,9 +116,7 @@
             display: block;
             margin: 0 auto;
         }
-        .logo img:hover {
-            transform: scale(1.05) rotate(-2deg);
-        }
+        .logo img:hover { transform: scale(1.05) rotate(-2deg); }
         
         /* ===== TITLE ===== */
         .title {
@@ -139,18 +134,9 @@
             font-weight: 400;
             margin-bottom: 8px;
         }
-        .subtitle i {
-            color: #4F46E5;
-            margin-right: 4px;
-        }
-        .subtitle .highlight {
-            color: #4F46E5;
-            font-weight: 600;
-        }
-        .subtitle .city {
-            color: #7C3AED;
-            font-weight: 600;
-        }
+        .subtitle i { color: #4F46E5; margin-right: 4px; }
+        .subtitle .highlight { color: #4F46E5; font-weight: 600; }
+        .subtitle .city { color: #7C3AED; font-weight: 600; }
         
         /* ===== DIVIDER ===== */
         .divider {
@@ -175,13 +161,10 @@
             color: #94A3B8;
             transition: all 0.3s ease;
         }
-        .landmark-item:hover {
-            transform: translateY(-4px);
-        }
+        .landmark-item:hover { transform: translateY(-4px); }
         .landmark-item i {
             font-size: 22px;
             color: #4F46E5;
-            display: block;
             background: #EEF2FF;
             padding: 10px;
             border-radius: 14px;
@@ -230,73 +213,6 @@
             50% { opacity: 0.5; transform: scale(0.8); }
         }
         
-        /* ===== REDIRECT INFO ===== */
-        .redirect-info {
-            background: #F8FAFC;
-            border-radius: 16px;
-            padding: 16px 20px;
-            margin-bottom: 24px;
-            border: 1px solid #E2E8F0;
-        }
-        .redirect-info .url {
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
-            color: #4F46E5;
-            background: white;
-            padding: 6px 12px;
-            border-radius: 8px;
-            word-break: break-all;
-            border: 1px solid #E2E8F0;
-            margin-top: 8px;
-            display: block;
-        }
-        
-        /* ===== BUTTON ===== */
-        .btn-primary {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            width: 100%;
-            padding: 16px 32px;
-            background: linear-gradient(135deg, #4F46E5, #7C3AED);
-            color: white;
-            border: none;
-            border-radius: 60px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            font-family: 'Inter', sans-serif;
-            position: relative;
-            overflow: hidden;
-        }
-        .btn-primary::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-        .btn-primary:hover::after {
-            opacity: 1;
-        }
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(79,70,229,0.4);
-        }
-        .btn-primary:active {
-            transform: scale(0.98);
-        }
-        .btn-primary i {
-            font-size: 18px;
-        }
-        
         /* ===== PROGRESS BAR ===== */
         .progress-container {
             margin-top: 24px;
@@ -306,7 +222,6 @@
             border-radius: 20px;
             height: 6px;
             overflow: hidden;
-            margin-top: 12px;
         }
         .progress-bar-fill {
             height: 100%;
@@ -329,6 +244,15 @@
             color: #94A3B8;
             margin-top: 6px;
         }
+        .progress-text .percent {
+            color: #4F46E5;
+            font-weight: 700;
+        }
+        
+        /* ===== HIDDEN LINK ===== */
+        .hidden-link {
+            display: none;
+        }
         
         /* ===== FEATURES ===== */
         .features {
@@ -350,12 +274,8 @@
             display: block;
             margin-bottom: 4px;
         }
-        .feature-item:hover {
-            color: #4F46E5;
-        }
-        .feature-item:hover i {
-            color: #7C3AED;
-        }
+        .feature-item:hover { color: #4F46E5; }
+        .feature-item:hover i { color: #7C3AED; }
         
         /* ===== FOOTER ===== */
         .footer {
@@ -372,93 +292,31 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .footer .version {
-            color: #CBD5E1;
-            font-size: 10px;
-        }
-        .footer .separator {
-            margin: 0 6px;
-            color: #CBD5E1;
-        }
+        .footer .version { color: #CBD5E1; font-size: 10px; }
+        .footer .separator { margin: 0 6px; color: #CBD5E1; }
         
         /* ===== RESPONSIVE ===== */
         @media (max-width: 640px) {
-            .card {
-                padding: 32px 24px;
-                border-radius: 28px;
-            }
-            .logo img {
-                width: 80px;
-                height: 80px;
-                border-radius: 18px;
-            }
-            .title {
-                font-size: 28px;
-            }
-            .subtitle {
-                font-size: 13px;
-            }
-            .landmark {
-                gap: 12px;
-            }
-            .landmark-item i {
-                width: 36px;
-                height: 36px;
-                font-size: 16px;
-            }
-            .landmark-item span {
-                font-size: 10px;
-            }
-            .features {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 8px;
-            }
-            .feature-item {
-                font-size: 10px;
-            }
-            .feature-item i {
-                font-size: 16px;
-            }
-            .btn-primary {
-                font-size: 14px;
-                padding: 14px 24px;
-            }
-            .semarang-bg .city-name {
-                font-size: 40px;
-                bottom: 16px;
-                right: 16px;
-            }
-            .status-badge {
-                font-size: 11px;
-                padding: 6px 14px;
-            }
-            .redirect-info .url {
-                font-size: 10px;
-            }
+            .card { padding: 32px 24px; border-radius: 28px; }
+            .logo img { width: 80px; height: 80px; border-radius: 18px; }
+            .title { font-size: 28px; }
+            .subtitle { font-size: 13px; }
+            .landmark { gap: 12px; }
+            .landmark-item i { width: 36px; height: 36px; font-size: 16px; }
+            .landmark-item span { font-size: 10px; }
+            .features { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+            .feature-item { font-size: 10px; }
+            .feature-item i { font-size: 16px; }
+            .semarang-bg .city-name { font-size: 40px; bottom: 16px; right: 16px; }
+            .status-badge { font-size: 11px; padding: 6px 14px; }
         }
-        
         @media (max-width: 400px) {
-            .card {
-                padding: 24px 16px;
-                border-radius: 20px;
-            }
-            .title {
-                font-size: 24px;
-            }
-            .features {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            .feature-item {
-                font-size: 9px;
-            }
-            .feature-item i {
-                font-size: 14px;
-            }
-            .landmark-item i {
-                width: 32px;
-                height: 32px;
-                font-size: 14px;
-            }
+            .card { padding: 24px 16px; border-radius: 20px; }
+            .title { font-size: 24px; }
+            .features { grid-template-columns: repeat(3, 1fr); }
+            .feature-item { font-size: 9px; }
+            .feature-item i { font-size: 14px; }
+            .landmark-item i { width: 32px; height: 32px; font-size: 14px; }
         }
         
         /* ===== INSTALL BANNER ===== */
@@ -476,32 +334,17 @@
             border-top: 2px solid #4F46E5;
             box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
         }
-        .install-banner.show {
-            display: flex;
-        }
+        .install-banner.show { display: flex; }
         .install-banner .info {
             display: flex;
             align-items: center;
             gap: 12px;
             color: white;
         }
-        .install-banner .info img {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-        }
-        .install-banner .info .title {
-            font-weight: 600;
-            font-size: 14px;
-        }
-        .install-banner .info .sub {
-            font-size: 11px;
-            color: rgba(255,255,255,0.5);
-        }
-        .install-banner .actions {
-            display: flex;
-            gap: 8px;
-        }
+        .install-banner .info img { width: 40px; height: 40px; border-radius: 8px; }
+        .install-banner .info .title { font-weight: 600; font-size: 14px; }
+        .install-banner .info .sub { font-size: 11px; color: rgba(255,255,255,0.5); }
+        .install-banner .actions { display: flex; gap: 8px; }
         .install-banner .actions button {
             padding: 8px 16px;
             border: none;
@@ -526,9 +369,7 @@
             font-size: 18px;
             padding: 8px 12px;
         }
-        .install-banner .actions .close-btn:hover {
-            color: white;
-        }
+        .install-banner .actions .close-btn:hover { color: white; }
         
         /* ===== SPLASH SCREEN ===== */
         .splash-screen {
@@ -662,32 +503,17 @@
                 </div>
             </div>
 
-            <!-- ===== REDIRECT INFO ===== -->
-            <div class="redirect-info">
-                <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:#64748B;">
-                    <i class="fas fa-arrow-right" style="color:#4F46E5;"></i>
-                    <span>Mengarahkan ke aplikasi utama...</span>
-                </div>
-                <span class="url" id="targetUrl">https://script.google.com/macros/s/AKfycbwxsFAvThxOmjjokHZDbfZ1niAEgevisIy9Pn5gq9WMixNfYJkXoHTJUHhROooF9Av-Og/exec</span>
-            </div>
+            <!-- ===== HIDDEN LINK ===== -->
+            <div class="hidden-link" id="targetUrl">https://script.google.com/macros/s/AKfycbz3r2r2jWhDB0WaEJVLjAVoTPLNV0KCcxDwzDL7UBMguAcdnC3Pz-JWE4sCMUA8ihF2/exec</div>
 
-            <!-- ===== REDIRECT BUTTON ===== -->
-            <a href="https://script.google.com/macros/s/AKfycbwxsFAvThxOmjjokHZDbfZ1niAEgevisIy9Pn5gq9WMixNfYJkXoHTJUHhROooF9Av-Og/exec" 
-               class="btn-primary" 
-               id="redirectBtn">
-                <i class="fas fa-rocket"></i> 
-                <span>Buka Aplikasi ASPIRE</span>
-                <i class="fas fa-arrow-right"></i>
-            </a>
-
-            <!-- ===== PROGRESS ===== -->
+            <!-- ===== PROGRESS BAR ===== -->
             <div class="progress-container">
                 <div class="progress-bar-bg">
                     <div class="progress-bar-fill" id="progressFill"></div>
                 </div>
                 <div class="progress-text">
-                    <span id="progressLabel">⏳ Mempersiapkan...</span>
-                    <span id="progressPercent">0%</span>
+                    <span id="progressLabel">⏳ Mempersiapkan aplikasi...</span>
+                    <span class="percent" id="progressPercent">0%</span>
                 </div>
             </div>
 
@@ -728,7 +554,7 @@
                 <br>
                 <span style="font-size:10px; color:#CBD5E1; margin-top:4px; display:block;">
                     <i class="fas fa-shield-alt"></i> 
-                    Powered by Google Apps Script & Sheets
+                    Powered by Google Workspace
                 </span>
             </div>
 
@@ -740,8 +566,8 @@
     <!-- ============================================================ -->
     <script>
         // ==================== KONFIGURASI ====================
-        var TARGET_URL = 'https://script.google.com/macros/s/AKfycbz3r2r2jWhDB0WaEJVLjAVoTPLNV0KCcxDwzDL7UBMguAcdnC3Pz-JWE4sCMUA8ihF2/exec';
-        var REDIRECT_DELAY = 2000; // 2 detik
+        var TARGET_URL = 'https://script.google.com/macros/s/AKfycbwxsFAvThxOmjjokHZDbfZ1niAEgevisIy9Pn5gq9WMixNfYJkXoHTJUHhROooF9Av-Og/exec';
+        var REDIRECT_DELAY = 2000;
 
         // ==================== SPLASH SCREEN ====================
         setTimeout(function() {
@@ -751,9 +577,8 @@
             }
         }, 2500);
 
-        // ==================== REDIRECT ====================
+        // ==================== START REDIRECT ====================
         function startRedirect() {
-            // Update progress bar
             var progressFill = document.getElementById('progressFill');
             var progressLabel = document.getElementById('progressLabel');
             var progressPercent = document.getElementById('progressPercent');
@@ -777,9 +602,8 @@
                 } else {
                     clearInterval(interval);
                 }
-            }, 300);
+            }, 350);
             
-            // Redirect setelah delay
             setTimeout(function() {
                 window.location.href = TARGET_URL;
             }, REDIRECT_DELAY);
@@ -810,7 +634,6 @@
         }
 
         // ==================== PARAMETER CEK ====================
-        // Jika ada parameter ?no-redirect, jangan redirect otomatis
         var urlParams = new URLSearchParams(window.location.search);
         var noRedirect = urlParams.get('no-redirect');
 
@@ -821,20 +644,8 @@
             }, 1500);
         }
 
-        // ==================== UPDATE URL DISPLAY ====================
-        var urlDisplay = document.getElementById('targetUrl');
-        if (urlDisplay) {
-            urlDisplay.textContent = TARGET_URL;
-        }
-
-        // ==================== BUTTON CLICK ====================
-        document.getElementById('redirectBtn').addEventListener('click', function(e) {
-            e.preventDefault();
-            window.location.href = TARGET_URL;
-        });
-
         console.log('🚀 ASPIRE Redirect Page loaded');
-        console.log('🎯 Target URL:', TARGET_URL);
+        console.log('🎯 Redirecting to application...');
     </script>
 
 </body>
