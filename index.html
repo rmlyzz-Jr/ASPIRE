@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>ASPIRE - Sistem Informasi Pengelola Aduan DPU Semarang</title>
     
-    <!-- ==================== PWA META TAGS ==================== -->
+    <!-- PWA META TAGS -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#4F46E5">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -17,26 +17,25 @@
     <meta name="msapplication-TileColor" content="#4F46E5">
     <meta name="msapplication-TileImage" content="https://i.ibb.co.com/qMvmKCkH/aspire.png">
     
-    <!-- ==================== FONT & ICON ==================== -->
+    <!-- FONT & ICON -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <!-- ==================== STYLE ==================== -->
     <style>
-        /* ===== RESET & BASE ===== */
+        /* RESET */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: 'Inter', sans-serif; 
             background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%); 
             min-height: 100vh; 
-            color: #1E293B;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            color: #1E293B;
         }
         
-        /* ===== SEMARANG BACKGROUND ===== */
+        /* BACKGROUND */
         .semarang-bg { 
             position: fixed; 
             top: 0; 
@@ -74,7 +73,7 @@
             text-transform: uppercase;
         }
         
-        /* ===== MAIN CONTAINER ===== */
+        /* CONTAINER */
         .container {
             position: relative;
             z-index: 10;
@@ -82,20 +81,19 @@
             width: 100%;
             animation: fadeInUp 0.8s ease;
         }
-        
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(40px) scale(0.95); }
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
         
-        /* ===== CARD ===== */
+        /* CARD */
         .card {
             background: rgba(255,255,255,0.97);
             backdrop-filter: blur(20px);
             border-radius: 40px;
             padding: 48px 40px;
             text-align: center;
-            box-shadow: 0 30px 60px -20px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.05);
+            box-shadow: 0 30px 60px -20px rgba(0,0,0,0.8);
             border: 1px solid rgba(255,255,255,0.1);
             transition: all 0.3s ease;
         }
@@ -104,7 +102,7 @@
             transform: translateY(-4px);
         }
         
-        /* ===== LOGO ===== */
+        /* LOGO */
         .logo { margin-bottom: 24px; }
         .logo img {
             width: 120px;
@@ -118,7 +116,7 @@
         }
         .logo img:hover { transform: scale(1.05) rotate(-2deg); }
         
-        /* ===== TITLE ===== */
+        /* TITLE */
         .title {
             font-size: 36px;
             font-weight: 800;
@@ -138,7 +136,7 @@
         .subtitle .highlight { color: #4F46E5; font-weight: 600; }
         .subtitle .city { color: #7C3AED; font-weight: 600; }
         
-        /* ===== DIVIDER ===== */
+        /* DIVIDER */
         .divider {
             width: 60px;
             height: 4px;
@@ -147,7 +145,7 @@
             margin: 16px auto 24px;
         }
         
-        /* ===== LANDMARK ICONS ===== */
+        /* LANDMARK */
         .landmark {
             display: flex;
             justify-content: center;
@@ -182,7 +180,7 @@
             transform: scale(1.1) rotate(-5deg);
         }
         
-        /* ===== STATUS ===== */
+        /* STATUS BADGE */
         .status-container {
             background: #F1F5F9;
             border-radius: 60px;
@@ -213,10 +211,8 @@
             50% { opacity: 0.5; transform: scale(0.8); }
         }
         
-        /* ===== PROGRESS BAR ===== */
-        .progress-container {
-            margin-top: 24px;
-        }
+        /* PROGRESS BAR */
+        .progress-container { margin-top: 24px; }
         .progress-bar-bg {
             background: #E2E8F0;
             border-radius: 20px;
@@ -229,13 +225,6 @@
             border-radius: 20px;
             width: 0%;
             transition: width 0.5s ease;
-            animation: progressAnim 3s ease forwards;
-        }
-        @keyframes progressAnim {
-            0% { width: 0%; }
-            30% { width: 45%; }
-            60% { width: 75%; }
-            100% { width: 100%; }
         }
         .progress-text {
             display: flex;
@@ -249,12 +238,7 @@
             font-weight: 700;
         }
         
-        /* ===== HIDDEN LINK ===== */
-        .hidden-link {
-            display: none;
-        }
-        
-        /* ===== FEATURES ===== */
+        /* FEATURES */
         .features {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -277,7 +261,7 @@
         .feature-item:hover { color: #4F46E5; }
         .feature-item:hover i { color: #7C3AED; }
         
-        /* ===== FOOTER ===== */
+        /* FOOTER */
         .footer {
             margin-top: 24px;
             padding-top: 20px;
@@ -295,31 +279,7 @@
         .footer .version { color: #CBD5E1; font-size: 10px; }
         .footer .separator { margin: 0 6px; color: #CBD5E1; }
         
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 640px) {
-            .card { padding: 32px 24px; border-radius: 28px; }
-            .logo img { width: 80px; height: 80px; border-radius: 18px; }
-            .title { font-size: 28px; }
-            .subtitle { font-size: 13px; }
-            .landmark { gap: 12px; }
-            .landmark-item i { width: 36px; height: 36px; font-size: 16px; }
-            .landmark-item span { font-size: 10px; }
-            .features { grid-template-columns: repeat(3, 1fr); gap: 8px; }
-            .feature-item { font-size: 10px; }
-            .feature-item i { font-size: 16px; }
-            .semarang-bg .city-name { font-size: 40px; bottom: 16px; right: 16px; }
-            .status-badge { font-size: 11px; padding: 6px 14px; }
-        }
-        @media (max-width: 400px) {
-            .card { padding: 24px 16px; border-radius: 20px; }
-            .title { font-size: 24px; }
-            .features { grid-template-columns: repeat(3, 1fr); }
-            .feature-item { font-size: 9px; }
-            .feature-item i { font-size: 14px; }
-            .landmark-item i { width: 32px; height: 32px; font-size: 14px; }
-        }
-        
-        /* ===== INSTALL BANNER ===== */
+        /* INSTALL BANNER */
         .install-banner {
             position: fixed;
             bottom: 0;
@@ -371,7 +331,7 @@
         }
         .install-banner .actions .close-btn:hover { color: white; }
         
-        /* ===== SPLASH SCREEN ===== */
+        /* SPLASH SCREEN */
         .splash-screen {
             position: fixed;
             top: 0;
@@ -421,11 +381,35 @@
             from { opacity: 1; visibility: visible; }
             to { opacity: 0; visibility: hidden; }
         }
+        
+        /* RESPONSIVE */
+        @media (max-width: 640px) {
+            .card { padding: 32px 24px; border-radius: 28px; }
+            .logo img { width: 80px; height: 80px; border-radius: 18px; }
+            .title { font-size: 28px; }
+            .subtitle { font-size: 13px; }
+            .landmark { gap: 12px; }
+            .landmark-item i { width: 36px; height: 36px; font-size: 16px; }
+            .landmark-item span { font-size: 10px; }
+            .features { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+            .feature-item { font-size: 10px; }
+            .feature-item i { font-size: 16px; }
+            .semarang-bg .city-name { font-size: 40px; bottom: 16px; right: 16px; }
+            .status-badge { font-size: 11px; padding: 6px 14px; }
+        }
+        @media (max-width: 400px) {
+            .card { padding: 24px 16px; border-radius: 20px; }
+            .title { font-size: 24px; }
+            .features { grid-template-columns: repeat(3, 1fr); }
+            .feature-item { font-size: 9px; }
+            .feature-item i { font-size: 14px; }
+            .landmark-item i { width: 32px; height: 32px; font-size: 14px; }
+        }
     </style>
 </head>
 <body>
 
-    <!-- ===== SPLASH SCREEN ===== -->
+    <!-- SPLASH SCREEN -->
     <div class="splash-screen" id="splashScreen">
         <img src="https://i.ibb.co.com/qMvmKCkH/aspire.png" alt="ASPIRE">
         <h1>ASPIRE</h1>
@@ -433,7 +417,7 @@
         <p class="subtitle">Kota Semarang</p>
     </div>
 
-    <!-- ===== INSTALL BANNER ===== -->
+    <!-- INSTALL BANNER -->
     <div class="install-banner" id="installBanner">
         <div class="info">
             <img src="https://i.ibb.co.com/qMvmKCkH/aspire.png" alt="ASPIRE">
@@ -444,26 +428,26 @@
         </div>
         <div class="actions">
             <button class="install-btn" onclick="installApp()"><i class="fas fa-download"></i> Install</button>
-            <button class="close-btn" onclick="closeInstallBanner()">×</button>
+            <button class="close-btn" onclick="closeInstallBanner()">x</button>
         </div>
     </div>
 
-    <!-- ===== BACKGROUND ===== -->
+    <!-- BACKGROUND -->
     <div class="semarang-bg">
         <img src="https://i.ibb.co.com/m5XnkM8N/semarang-map.jpg" alt="Kota Semarang">
         <div class="city-name">SEMARANG</div>
     </div>
 
-    <!-- ===== MAIN CONTENT ===== -->
+    <!-- MAIN CONTENT -->
     <div class="container">
         <div class="card">
 
-            <!-- ===== LOGO ===== -->
+            <!-- LOGO -->
             <div class="logo">
                 <img src="https://i.ibb.co.com/qMvmKCkH/aspire.png" alt="ASPIRE Logo">
             </div>
 
-            <!-- ===== TITLE ===== -->
+            <!-- TITLE -->
             <div class="title">ASPIRE</div>
             <div class="subtitle">
                 <i class="fas fa-map-marker-alt"></i> 
@@ -472,10 +456,10 @@
                 <span class="city">Kota Semarang</span>
             </div>
 
-            <!-- ===== DIVIDER ===== -->
+            <!-- DIVIDER -->
             <div class="divider"></div>
 
-            <!-- ===== LANDMARK ===== -->
+            <!-- LANDMARK -->
             <div class="landmark">
                 <div class="landmark-item">
                     <i class="fas fa-road"></i>
@@ -495,29 +479,26 @@
                 </div>
             </div>
 
-            <!-- ===== STATUS ===== -->
+            <!-- STATUS -->
             <div class="status-container">
                 <div class="status-badge">
                     <span class="dot"></span>
-                    <span>🟢 Aplikasi Aktif</span>
+                    <span> Aplikasi Aktif</span>
                 </div>
             </div>
 
-            <!-- ===== HIDDEN LINK ===== -->
-            <div class="hidden-link" id="targetUrl">https://script.google.com/macros/s/AKfycbxoP5a_Rin7w0kpcbWDrc56LG25UVypqGEzWcN0rB7qtZw5uNsEYBRPvIhgR3Ln4Cbdkw/exec</div>
-
-            <!-- ===== PROGRESS BAR ===== -->
+            <!-- PROGRESS BAR -->
             <div class="progress-container">
                 <div class="progress-bar-bg">
                     <div class="progress-bar-fill" id="progressFill"></div>
                 </div>
                 <div class="progress-text">
-                    <span id="progressLabel">⏳ Mempersiapkan aplikasi...</span>
+                    <span id="progressLabel">Mempersiapkan aplikasi...</span>
                     <span class="percent" id="progressPercent">0%</span>
                 </div>
             </div>
 
-            <!-- ===== FEATURES ===== -->
+            <!-- FEATURES -->
             <div class="features">
                 <div class="feature-item">
                     <i class="fas fa-database"></i>
@@ -545,7 +526,7 @@
                 </div>
             </div>
 
-            <!-- ===== FOOTER ===== -->
+            <!-- FOOTER -->
             <div class="footer">
                 <i class="fas fa-code"></i>
                 System by <span class="author">Rmlyzz</span>
@@ -561,15 +542,12 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- ==================== JAVASCRIPT ============================= -->
-    <!-- ============================================================ -->
+    <!-- JAVASCRIPT -->
     <script>
-        // ==================== KONFIGURASI ====================
         var TARGET_URL = 'https://script.google.com/macros/s/AKfycbxoP5a_Rin7w0kpcbWDrc56LG25UVypqGEzWcN0rB7qtZw5uNsEYBRPvIhgR3Ln4Cbdkw/exec';
         var REDIRECT_DELAY = 2000;
 
-        // ==================== SPLASH SCREEN ====================
+        // Splash screen hide
         setTimeout(function() {
             var splash = document.getElementById('splashScreen');
             if (splash) {
@@ -577,18 +555,18 @@
             }
         }, 2500);
 
-        // ==================== START REDIRECT ====================
+        // Start redirect with progress
         function startRedirect() {
             var progressFill = document.getElementById('progressFill');
             var progressLabel = document.getElementById('progressLabel');
             var progressPercent = document.getElementById('progressPercent');
             
             var steps = [
-                { label: '🔄 Menyiapkan koneksi...', percent: 10 },
-                { label: '📡 Menghubungi server...', percent: 30 },
-                { label: '🔐 Memverifikasi akses...', percent: 50 },
-                { label: '🚀 Mengalihkan ke aplikasi...', percent: 75 },
-                { label: '✅ Siap!', percent: 100 }
+                { label: 'Menyiapkan koneksi...', percent: 10 },
+                { label: 'Menghubungi server...', percent: 30 },
+                { label: 'Memverifikasi akses...', percent: 50 },
+                { label: 'Mengalihkan ke aplikasi...', percent: 75 },
+                { label: 'Siap!', percent: 100 }
             ];
             
             var stepIndex = 0;
@@ -609,7 +587,7 @@
             }, REDIRECT_DELAY);
         }
 
-        // ==================== INSTALL BANNER ====================
+        // Install banner
         window.addEventListener('beforeinstallprompt', function(e) {
             e.preventDefault();
             window.deferredPrompt = e;
@@ -621,7 +599,7 @@
                 window.deferredPrompt.prompt();
                 window.deferredPrompt.userChoice.then(function(choiceResult) {
                     if (choiceResult.outcome === 'accepted') {
-                        console.log('✅ User accepted the install prompt');
+                        console.log('User accepted install');
                     }
                     window.deferredPrompt = null;
                     document.getElementById('installBanner').classList.remove('show');
@@ -633,19 +611,19 @@
             document.getElementById('installBanner').classList.remove('show');
         }
 
-        // ==================== PARAMETER CEK ====================
+        // Check for no-redirect param
         var urlParams = new URLSearchParams(window.location.search);
         var noRedirect = urlParams.get('no-redirect');
 
-        // ==================== AUTO REDIRECT ====================
+        // Auto redirect
         if (noRedirect !== 'true') {
             setTimeout(function() {
                 startRedirect();
             }, 1500);
         }
 
-        console.log('🚀 ASPIRE Redirect Page loaded');
-        console.log('🎯 Redirecting to application...');
+        console.log('ASPIRE Redirect Page loaded');
+        console.log('Redirecting to application...');
     </script>
 
 </body>
