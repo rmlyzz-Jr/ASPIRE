@@ -10,7 +10,6 @@ const STATIC_ASSETS = [
     'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
     'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js',
-    // 🔥 TAMBAHKAN FAVICON/LOGO
     'https://i.ibb.co.com/qMvmKCkH/aspire.png'
 ];
 
@@ -92,7 +91,6 @@ const OFFLINE_PAGE = `
         </div>
     </div>
     <script>
-        // Coba refresh otomatis saat koneksi kembali
         window.addEventListener('online', function() {
             location.reload();
         });
@@ -107,11 +105,9 @@ self.addEventListener('install', event => {
         caches.open(CACHE_NAME)
             .then(cache => {
                 console.log('✅ Caching static assets...');
-                // Cache static assets
                 return cache.addAll(STATIC_ASSETS);
             })
             .then(() => {
-                // 🔥 CACHE OFFLINE PAGE
                 return caches.open(CACHE_NAME)
                     .then(cache => {
                         const response = new Response(OFFLINE_PAGE, {
@@ -151,13 +147,11 @@ self.addEventListener('fetch', event => {
     const request = event.request;
     const url = new URL(request.url);
     
-    // 🔥 SKIP: Non-GET requests
     if (request.method !== 'GET') {
         event.respondWith(fetch(request));
         return;
     }
 
-    // 🔥 SKIP: External APIs (maps, wasenderapi, image hosting)
     if (url.hostname.includes('maps.googleapis.com') || 
         url.hostname.includes('wasenderapi.com') ||
         url.hostname.includes('i.ibb.co.com')) {
@@ -165,13 +159,11 @@ self.addEventListener('fetch', event => {
         return;
     }
 
-    // 🔥 SPECIAL: Google Apps Script (CACHE FIRST, THEN NETWORK)
     if (url.href.includes('script.google.com')) {
         event.respondWith(
             caches.match(request)
                 .then(cachedResponse => {
                     if (cachedResponse) {
-                        // 🔥 UPDATE CACHE IN BACKGROUND
                         fetch(request)
                             .then(networkResponse => {
                                 if (networkResponse && networkResponse.status === 200) {
@@ -182,7 +174,6 @@ self.addEventListener('fetch', event => {
                             .catch(() => {});
                         return cachedResponse;
                     }
-                    // 🔥 FALLBACK: FETCH FROM NETWORK
                     return fetch(request)
                         .then(networkResponse => {
                             if (networkResponse && networkResponse.status === 200) {
@@ -192,7 +183,6 @@ self.addEventListener('fetch', event => {
                             return networkResponse;
                         })
                         .catch(() => {
-                            // 🔥 TAMPILKAN OFFLINE PAGE
                             return caches.match('/offline');
                         });
                 })
@@ -200,11 +190,9 @@ self.addEventListener('fetch', event => {
         return;
     }
 
-    // 🔥 NORMAL: Network First, Fallback to Cache
     event.respondWith(
         fetch(request)
             .then(response => {
-                // Cache successful responses
                 if (response && response.status === 200) {
                     const responseClone = response.clone();
                     caches.open(CACHE_NAME)
@@ -220,7 +208,6 @@ self.addEventListener('fetch', event => {
                         if (cachedResponse) {
                             return cachedResponse;
                         }
-                        // 🔥 HTML FALLBACK
                         if (request.headers.get('accept') && 
                             request.headers.get('accept').includes('text/html')) {
                             return caches.match('/offline');
@@ -281,20 +268,17 @@ self.addEventListener('notificationclick', event => {
         return;
     }
 
-    // 🔥 BUKA APLIKASI
     const urlToOpen = event.notification.data?.url || GAS_URL;
     
     event.waitUntil(
         clients.matchAll({ type: 'window', includeUncontrolled: true })
             .then(windowClients => {
-                // Cari tab yang sudah terbuka
                 for (let i = 0; i < windowClients.length; i++) {
                     const client = windowClients[i];
                     if (client.url === urlToOpen && 'focus' in client) {
                         return client.focus();
                     }
                 }
-                // Buka tab baru
                 if (clients.openWindow) {
                     return clients.openWindow(urlToOpen);
                 }
