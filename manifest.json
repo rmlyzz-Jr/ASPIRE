@@ -1,9 +1,8 @@
-{
-  "name": "ASPIRE - Sistem Aduan DPU Semarang",
+"name": "ASPIRE - Sistem Aduan DPU Semarang",
   "short_name": "ASPIRE",
   "description": "Sistem Informasi Pengelola Aduan DPU Kota Semarang - Dari Aduan Menjadi Tindakan",
-  "start_url": "./",
-  "scope": "./",
+  "start_url": "https://script.google.com/macros/s/AKfycbxoP5a_Rin7w0kpcbWDrc56LG25UVypqGEzWcN0rB7qtZw5uNsEYBRPvIhgR3Ln4Cbdkw/exec",
+  "scope": "https://script.google.com/macros/s/AKfycbxoP5a_Rin7w0kpcbWDrc56LG25UVypqGEzWcN0rB7qtZw5uNsEYBRPvIhgR3Ln4Cbdkw/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0F172A",
@@ -41,16 +40,30 @@
       "purpose": "any maskable"
     }
   ],
+  "screenshots": [
+    {
+      "src": "https://i.ibb.co.com/qMvmKCkH/aspire.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "Halaman Login ASPIRE"
+    },
+    {
+      "src": "https://i.ibb.co.com/qMvmKCkH/aspire.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "Dashboard ASPIRE"
+    }
+  ],
   "shortcuts": [
     {
       "name": "📝 Buat Laporan Baru",
       "short_name": "Laporan Baru",
       "description": "Buat laporan aduan baru",
-      "url": "./?action=form",
+      "url": "https://script.google.com/macros/s/AKfycbxpaF_LQmPuB67yqWNbo_N0A8TFrmvJ9etJFvKoYcB4ERcmNrSRITz6H-BnIf0GT2Pu4A/exec?action=form",
       "icons": [
-        {
-          "src": "https://i.ibb.co.com/qMvmKCkH/aspire.png",
-          "sizes": "192x192"
+        { 
+          "src": "https://i.ibb.co.com/qMvmKCkH/aspire.png", 
+          "sizes": "192x192" 
         }
       ]
     },
@@ -58,11 +71,11 @@
       "name": "📊 Dashboard",
       "short_name": "Dashboard",
       "description": "Lihat dashboard statistik",
-      "url": "./?action=dashboard",
+      "url": "https://script.google.com/macros/s/AKfycbxpaF_LQmPuB67yqWNbo_N0A8TFrmvJ9etJFvKoYcB4ERcmNrSRITz6H-BnIf0GT2Pu4A/exec?action=dashboard",
       "icons": [
-        {
-          "src": "https://i.ibb.co.com/qMvmKCkH/aspire.png",
-          "sizes": "192x192"
+        { 
+          "src": "https://i.ibb.co.com/qMvmKCkH/aspire.png", 
+          "sizes": "192x192" 
         }
       ]
     },
@@ -70,11 +83,11 @@
       "name": "📋 Daftar Laporan",
       "short_name": "Daftar",
       "description": "Lihat daftar laporan aduan",
-      "url": "./?action=list",
+      "url": "https://script.google.com/macros/s/AKfycbxpaF_LQmPuB67yqWNbo_N0A8TFrmvJ9etJFvKoYcB4ERcmNrSRITz6H-BnIf0GT2Pu4A/exec?action=list",
       "icons": [
-        {
-          "src": "https://i.ibb.co.com/qMvmKCkH/aspire.png",
-          "sizes": "192x192"
+        { 
+          "src": "https://i.ibb.co.com/qMvmKCkH/aspire.png", 
+          "sizes": "192x192" 
         }
       ]
     },
@@ -82,11 +95,11 @@
       "name": "📈 Analytics",
       "short_name": "Analytics",
       "description": "Lihat analytics & prediction",
-      "url": "./?action=analytics",
+      "url": "https://script.google.com/macros/s/AKfycbxpaF_LQmPuB67yqWNbo_N0A8TFrmvJ9etJFvKoYcB4ERcmNrSRITz6H-BnIf0GT2Pu4A/exec?action=analytics",
       "icons": [
-        {
-          "src": "https://i.ibb.co.com/qMvmKCkH/aspire.png",
-          "sizes": "192x192"
+        { 
+          "src": "https://i.ibb.co.com/qMvmKCkH/aspire.png", 
+          "sizes": "192x192" 
         }
       ]
     }
@@ -95,5 +108,6 @@
   "prefer_related_applications": false,
   "display_override": ["standalone", "fullscreen"],
   "lang": "id",
-  "dir": "ltr"
+  "dir": "ltr",
+  "iarc_rating_id": ""
 }
