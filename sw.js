@@ -1,6 +1,6 @@
 // ==================== SERVICE WORKER - ASPIRE v2.0 ====================
 const CACHE_NAME = 'aspire-v2.0';
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbyP5xyd5fv-QUhCtLV9ZAEHVrGhl6lDiMiNc9Da43R-N3wrFchENT6ThE-hZ-58OclD/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbxoP5a_Rin7w0kpcbWDrc56LG25UVypqGEzWcN0rB7qtZw5uNsEYBRPvIhgR3Ln4Cbdkw/exec';
 
 // 🔥 STATIC ASSETS (HANYA UNTUK HALAMAN REDIRECT)
 const STATIC_ASSETS = [
@@ -241,7 +241,7 @@ self.addEventListener('push', event => {
         body: '📋 Ada update baru di sistem aduan',
         icon: 'https://i.ibb.co.com/qMvmKCkH/aspire.png',
         badge: 'https://i.ibb.co.com/qMvmKCkH/aspire.png',
-        url: './'
+        url: GAS_URL
     };
 
     if (event.data) {
@@ -259,7 +259,7 @@ self.addEventListener('push', event => {
         badge: data.badge || 'https://i.ibb.co.com/qMvmKCkH/aspire.png',
         vibrate: [200, 100, 200],
         data: {
-            url: data.url || './'
+            url: data.url || GAS_URL
         },
         actions: [
             { action: 'open', title: '📋 Buka Aplikasi' },
@@ -282,7 +282,7 @@ self.addEventListener('notificationclick', event => {
     }
 
     // 🔥 BUKA APLIKASI
-    const urlToOpen = event.notification.data?.url || './';
+    const urlToOpen = event.notification.data?.url || GAS_URL;
     
     event.waitUntil(
         clients.matchAll({ type: 'window', includeUncontrolled: true })
