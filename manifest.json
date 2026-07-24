@@ -41,20 +41,6 @@
       "purpose": "any maskable"
     }
   ],
-  "screenshots": [
-    {
-      "src": "https://i.ibb.co.com/qMvmKCkH/aspire.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "label": "Halaman Login ASPIRE"
-    },
-    {
-      "src": "https://i.ibb.co.com/qMvmKCkH/aspire.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "label": "Dashboard ASPIRE"
-    }
-  ],
   "shortcuts": [
     {
       "name": "📝 Buat Laporan Baru",
