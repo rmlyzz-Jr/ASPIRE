@@ -9,10 +9,13 @@ const STATIC_ASSETS = [
     './manifest.json',
     'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
+    'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js'
     'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js',
+    // 🔥 TAMBAHKAN FAVICON/LOGO
     'https://i.ibb.co.com/qMvmKCkH/aspire.png'
 ];
 
+// Install Service Worker
 // 🔥 OFFLINE FALLBACK PAGE (HTML)
 const OFFLINE_PAGE = `
 <!DOCTYPE html>
@@ -91,6 +94,7 @@ const OFFLINE_PAGE = `
         </div>
     </div>
     <script>
+        // Coba refresh otomatis saat koneksi kembali
         window.addEventListener('online', function() {
             location.reload();
         });
@@ -105,9 +109,12 @@ self.addEventListener('install', event => {
         caches.open(CACHE_NAME)
             .then(cache => {
                 console.log('✅ Caching static assets...');
+                // Cache static assets
                 return cache.addAll(STATIC_ASSETS);
             })
+            .then(() => self.skipWaiting())
             .then(() => {
+                // 🔥 CACHE OFFLINE PAGE
                 return caches.open(CACHE_NAME)
                     .then(cache => {
                         const response = new Response(OFFLINE_PAGE, {
@@ -123,18 +130,16 @@ self.addEventListener('install', event => {
     );
 });
 
+// Activate Service Worker
 // ==================== ACTIVATE ====================
 self.addEventListener('activate', event => {
     event.waitUntil(
         caches.keys().then(cacheNames => {
-            return Promise.all(
-                cacheNames.map(cacheName => {
-                    if (cacheName !== CACHE_NAME) {
-                        console.log('🗑️ Removing old cache:', cacheName);
-                        return caches.delete(cacheName);
+@@ -32,40 +139,79 @@ self.addEventListener('activate', event => {
                     }
                 })
             );
+        }).then(() => self.clients.claim())
         }).then(() => {
             console.log('✅ Service Worker activated');
             return self.clients.claim();
@@ -142,16 +147,24 @@ self.addEventListener('activate', event => {
     );
 });
 
+// Fetch Strategy: Network First, Fallback to Cache
 // ==================== FETCH ====================
 self.addEventListener('fetch', event => {
     const request = event.request;
     const url = new URL(request.url);
-    
+
+    // Skip non-GET requests
+    // 🔥 SKIP: Non-GET requests
     if (request.method !== 'GET') {
         event.respondWith(fetch(request));
         return;
     }
 
+    // Skip external resources like maps.googleapis.com
+    if (request.url.includes('maps.googleapis.com') || 
+        request.url.includes('wasenderapi.com') ||
+        request.url.includes('i.ibb.co.com')) {
+    // 🔥 SKIP: External APIs (maps, wasenderapi, image hosting)
     if (url.hostname.includes('maps.googleapis.com') || 
         url.hostname.includes('wasenderapi.com') ||
         url.hostname.includes('i.ibb.co.com')) {
@@ -159,11 +172,13 @@ self.addEventListener('fetch', event => {
         return;
     }
 
+    // 🔥 SPECIAL: Google Apps Script (CACHE FIRST, THEN NETWORK)
     if (url.href.includes('script.google.com')) {
         event.respondWith(
             caches.match(request)
                 .then(cachedResponse => {
                     if (cachedResponse) {
+                        // 🔥 UPDATE CACHE IN BACKGROUND
                         fetch(request)
                             .then(networkResponse => {
                                 if (networkResponse && networkResponse.status === 200) {
@@ -174,6 +189,7 @@ self.addEventListener('fetch', event => {
                             .catch(() => {});
                         return cachedResponse;
                     }
+                    // 🔥 FALLBACK: FETCH FROM NETWORK
                     return fetch(request)
                         .then(networkResponse => {
                             if (networkResponse && networkResponse.status === 200) {
@@ -183,6 +199,7 @@ self.addEventListener('fetch', event => {
                             return networkResponse;
                         })
                         .catch(() => {
+                            // 🔥 TAMPILKAN OFFLINE PAGE
                             return caches.match('/offline');
                         });
                 })
@@ -190,9 +207,20 @@ self.addEventListener('fetch', event => {
         return;
     }
 
+    // 🔥 NORMAL: Network First, Fallback to Cache
     event.respondWith(
         fetch(request)
             .then(response => {
+                // Clone response for caching
+                const responseClone = response.clone();
+                caches.open(CACHE_NAME)
+                    .then(cache => {
+                        if (request.url.startsWith('https://script.google.com')) {
+                            return;
+                        }
+                        cache.put(request, responseClone);
+                    });
+                // Cache successful responses
                 if (response && response.status === 200) {
                     const responseClone = response.clone();
                     caches.open(CACHE_NAME)
@@ -203,54 +231,51 @@ self.addEventListener('fetch', event => {
                 return response;
             })
             .catch(() => {
-                return caches.match(request)
-                    .then(cachedResponse => {
+@@ -74,9 +220,10 @@ self.addEventListener('fetch', event => {
                         if (cachedResponse) {
                             return cachedResponse;
                         }
+                        // Fallback for offline pages
+                        if (request.headers.get('accept').includes('text/html')) {
+                            return caches.match('./');
+                        // 🔥 HTML FALLBACK
                         if (request.headers.get('accept') && 
                             request.headers.get('accept').includes('text/html')) {
                             return caches.match('/offline');
                         }
                         return new Response('Offline - Content not available', {
                             status: 503,
-                            statusText: 'Service Unavailable'
-                        });
-                    });
-            })
+@@ -87,18 +234,20 @@ self.addEventListener('fetch', event => {
     );
 });
 
+// Handle push notifications
 // ==================== PUSH NOTIFICATION ====================
 self.addEventListener('push', event => {
     let data = {
+        title: 'ASPIRE Notification',
+        body: 'Ada update baru di sistem aduan',
         title: '🔔 ASPIRE Notification',
         body: '📋 Ada update baru di sistem aduan',
         icon: 'https://i.ibb.co.com/qMvmKCkH/aspire.png',
+        badge: 'https://i.ibb.co.com/qMvmKCkH/aspire.png'
         badge: 'https://i.ibb.co.com/qMvmKCkH/aspire.png',
-        url: GAS_URL
+        url: './'
     };
 
     if (event.data) {
         try {
+            data = event.data.json();
             const parsed = event.data.json();
             data = { ...data, ...parsed };
         } catch (e) {
             data.body = event.data.text();
         }
-    }
-
-    const options = {
-        body: data.body,
-        icon: data.icon || 'https://i.ibb.co.com/qMvmKCkH/aspire.png',
-        badge: data.badge || 'https://i.ibb.co.com/qMvmKCkH/aspire.png',
-        vibrate: [200, 100, 200],
-        data: {
-            url: data.url || GAS_URL
-        },
+@@ -115,23 +264,49 @@ self.addEventListener('push', event => {
         actions: [
             { action: 'open', title: '📋 Buka Aplikasi' },
             { action: 'close', title: '✖ Tutup' }
+        ]
         ],
         requireInteraction: true
     };
@@ -260,6 +285,7 @@ self.addEventListener('push', event => {
     );
 });
 
+// Handle notification click
 // ==================== NOTIFICATION CLICK ====================
 self.addEventListener('notificationclick', event => {
     event.notification.close();
@@ -268,22 +294,27 @@ self.addEventListener('notificationclick', event => {
         return;
     }
 
-    const urlToOpen = event.notification.data?.url || GAS_URL;
+    // 🔥 BUKA APLIKASI
+    const urlToOpen = event.notification.data?.url || './';
     
     event.waitUntil(
+        clients.openWindow('./')
         clients.matchAll({ type: 'window', includeUncontrolled: true })
             .then(windowClients => {
+                // Cari tab yang sudah terbuka
                 for (let i = 0; i < windowClients.length; i++) {
                     const client = windowClients[i];
                     if (client.url === urlToOpen && 'focus' in client) {
                         return client.focus();
                     }
                 }
+                // Buka tab baru
                 if (clients.openWindow) {
                     return clients.openWindow(urlToOpen);
                 }
             })
     );
+});
 });
 
 // ==================== MESSAGE HANDLER ====================
