@@ -60,7 +60,7 @@
       "name": "📝 Buat Laporan Baru",
       "short_name": "Laporan Baru",
       "description": "Buat laporan aduan baru",
-      "url": "https://script.google.com//s/AKfycbxFYvxJdl_Eh-dj0pMY6ZNyAp3yk7Dohw4yNXMpl8lMIell2W0GE0zhp2Qs3ZDNbQnyFg/exec",
+      "url": "https://script.google.com/macros/s/AKfycbwI8Lm6_ZxSdoyn9o3p7kEtHIpvPx4Wpi68mTSLpYkQJ_vk-JZD9d_o-n8EPgKkxyy9/exec/exec",
       "icons": [
         { 
           "src": "https://i.ibb.co.com/qMvmKCkH/aspire.png", 
@@ -72,7 +72,7 @@
       "name": "📊 Dashboard",
       "short_name": "Dashboard",
       "description": "Lihat dashboard statistik",
-      "url": "https://script.google.com//s/AKfycbxFYvxJdl_Eh-dj0pMY6ZNyAp3yk7Dohw4yNXMpl8lMIell2W0GE0zhp2Qs3ZDNbQnyFg/exec?action=dashboard",
+      "url": "https://script.google.com/macros/s/AKfycbwI8Lm6_ZxSdoyn9o3p7kEtHIpvPx4Wpi68mTSLpYkQJ_vk-JZD9d_o-n8EPgKkxyy9/exec?action=dashboard",
       "icons": [
         { 
           "src": "https://i.ibb.co.com/qMvmKCkH/aspire.png", 
@@ -84,7 +84,7 @@
       "name": "📋 Daftar Laporan",
       "short_name": "Daftar",
       "description": "Lihat daftar laporan aduan",
-      "url": "https://script.google.com//s/AKfycbxFYvxJdl_Eh-dj0pMY6ZNyAp3yk7Dohw4yNXMpl8lMIell2W0GE0zhp2Qs3ZDNbQnyFg/exec?action=list",
+      "url": "https://script.google.com/macros/s/AKfycbwI8Lm6_ZxSdoyn9o3p7kEtHIpvPx4Wpi68mTSLpYkQJ_vk-JZD9d_o-n8EPgKkxyy9/exec?action=list",
       "icons": [
         { 
           "src": "https://i.ibb.co.com/qMvmKCkH/aspire.png", 
@@ -96,7 +96,7 @@
       "name": "📈 Analytics",
       "short_name": "Analytics",
       "description": "Lihat analytics & prediction",
-      "url": "https://script.google.com//s/AKfycbxFYvxJdl_Eh-dj0pMY6ZNyAp3yk7Dohw4yNXMpl8lMIell2W0GE0zhp2Qs3ZDNbQnyFg/execc?action=analytics",
+      "url": "https://script.google.com/macros/s/AKfycbwI8Lm6_ZxSdoyn9o3p7kEtHIpvPx4Wpi68mTSLpYkQJ_vk-JZD9d_o-n8EPgKkxyy9/exec?action=analytics",
       "icons": [
         { 
           "src": "https://i.ibb.co.com/qMvmKCkH/aspire.png", 
