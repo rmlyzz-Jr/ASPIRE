@@ -1,6 +1,7 @@
 // ==================== SERVICE WORKER - ASPIRE v2.0 ====================
 const CACHE_NAME = 'aspire-v2.0';
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbwa2PeQphOReUb88Kj4nUb5V6TybV8jIGKv_oIqsNUD0P2RHaSog8cRUcn1TgK42KKZMQ/exec';
+const TARGET_URL = 'https://script.google.com/macros/s/AKfycbwa2PeQphOReUb88Kj4nUb5V6TybV8jIGKv_oIqsNUD0P2RHaSog8cRUcn1TgK42KKZMQ/exec';
+const GAS_URL = TARGET_URL;
 
 // 🔥 STATIC ASSETS (HANYA UNTUK HALAMAN REDIRECT)
 const STATIC_ASSETS = [
@@ -9,7 +10,6 @@ const STATIC_ASSETS = [
     './manifest.json',
     'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
-    'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js',  // 🔥 FIX: Added missing comma
     'https://i.ibb.co.com/qMvmKCkH/aspire.png'
 ];
 
@@ -236,7 +236,7 @@ self.addEventListener('push', event => {
         body: '📋 Ada update baru di sistem aduan',
         icon: 'https://i.ibb.co.com/qMvmKCkH/aspire.png',
         badge: 'https://i.ibb.co.com/qMvmKCkH/aspire.png',
-        url: './'
+        url: TARGET_URL
     };
 
     if (event.data) {
@@ -274,7 +274,7 @@ self.addEventListener('notificationclick', event => {
     }
 
     // 🔥 BUKA APLIKASI
-    const urlToOpen = event.notification.data?.url || './';
+    const urlToOpen = event.notification.data?.url || TARGET_URL;
     
     event.waitUntil(
         clients.matchAll({ type: 'window', includeUncontrolled: true })
