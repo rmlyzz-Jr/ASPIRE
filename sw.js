@@ -1,6 +1,6 @@
 // ==================== SERVICE WORKER - ASPIRE v2.0 ====================
 const CACHE_NAME = 'aspire-v2.0';
-const TARGET_URL = 'https://script.google.com/macros/s/AKfycbwa2PeQphOReUb88Kj4nUb5V6TybV8jIGKv_oIqsNUD0P2RHaSog8cRUcn1TgK42KKZMQ/exec';
+const TARGET_URL = 'https://script.google.com/macros/s/AKfycbzDdngEWL1wRX5LYyyQCkrntUpvvyp7gJVT1mVMwSHpy-_ajg0z5N8_hJDIHrCmGNC5EA/exec;
 const GAS_URL = TARGET_URL;
 
 // 🔥 STATIC ASSETS (HANYA UNTUK HALAMAN REDIRECT)
