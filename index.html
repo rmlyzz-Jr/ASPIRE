@@ -622,8 +622,19 @@
             }, 1500);
         }
 
-        console.log('ASPIRE Redirect Page loaded');
-        console.log('Redirecting to application...');
+        // ==================== SERVICE WORKER REGISTRATION ====================
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(function(reg) {
+                    console.log('✅ Service Worker registered successfully:', reg);
+                })
+                .catch(function(err) {
+                    console.log('❌ Service Worker registration failed:', err);
+                });
+        }
+
+        console.log('🚀 ASPIRE v2.0 loaded successfully');
+        console.log('📍 Redirecting to:', TARGET_URL);
     </script>
 
 </body>
