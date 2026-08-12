@@ -60,7 +60,7 @@
       "name": "📝 Buat Laporan Baru",
       "short_name": "Laporan Baru",
       "description": "Buat laporan aduan baru",
-      "url": "https://script.google.com/macros/s/AKfycbwa2PeQphOReUb88Kj4nUb5V6TybV8jIGKv_oIqsNUD0P2RHaSog8cRUcn1TgK42KKZMQ/exec",
+      "url": "https://script.google.com/macros/s/AKfycbwa2PeQphOReUb88Kj4nUb5V6TybV8jIGKv_oIqsNUD0P2RHaSog8cRUcn1TgK42KKZMQ/exec?action=new",
       "icons": [
         { 
           "src": "https://i.ibb.co.com/qMvmKCkH/aspire.png", 
@@ -109,6 +109,5 @@
   "prefer_related_applications": false,
   "display_override": ["standalone", "fullscreen"],
   "lang": "id",
-  "dir": "ltr",
-  "iarc_rating_id": ""
+  "dir": "ltr"
 }
