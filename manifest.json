@@ -2,8 +2,8 @@
   "name": "ASPIRE - Sistem Aduan DPU Semarang",
   "short_name": "ASPIRE",
   "description": "Sistem Informasi Pengelola Aduan DPU Kota Semarang - Dari Aduan Menjadi Tindakan",
-  "start_url": "https://script.google.com/macros/s/AKfycbzDdngEWL1wRX5LYyyQCkrntUpvvyp7gJVT1mVMwSHpy-_ajg0z5N8_hJDIHrCmGNC5EA/exec",
-  "scope": "https://script.google.com/macros/s/AKfycbzDdngEWL1wRX5LYyyQCkrntUpvvyp7gJVT1mVMwSHpy-_ajg0z5N8_hJDIHrCmGNC5EA/",
+  "start_url": "https://script.google.com/macros/s/AKfycbwa2PeQphOReUb88Kj4nUb5V6TybV8jIGKv_oIqsNUD0P2RHaSog8cRUcn1TgK42KKZMQ/exec",
+  "scope": "https://script.google.com/macros/s/AKfycbwa2PeQphOReUb88Kj4nUb5V6TybV8jIGKv_oIqsNUD0P2RHaSog8cRUcn1TgK42KKZMQ/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0F172A",
@@ -60,7 +60,7 @@
       "name": "📝 Buat Laporan Baru",
       "short_name": "Laporan Baru",
       "description": "Buat laporan aduan baru",
-      "url": "https://script.google.com/macros/s/AKfycbzDdngEWL1wRX5LYyyQCkrntUpvvyp7gJVT1mVMwSHpy-_ajg0z5N8_hJDIHrCmGNC5EA/exec",
+      "url": "https://script.google.com/macros/s/AKfycbwa2PeQphOReUb88Kj4nUb5V6TybV8jIGKv_oIqsNUD0P2RHaSog8cRUcn1TgK42KKZMQ/exec",
       "icons": [
         { 
           "src": "https://i.ibb.co.com/qMvmKCkH/aspire.png", 
@@ -72,7 +72,7 @@
       "name": "📊 Dashboard",
       "short_name": "Dashboard",
       "description": "Lihat dashboard statistik",
-      "url": "https://script.google.com/macros/s/AKfycbzDdngEWL1wRX5LYyyQCkrntUpvvyp7gJVT1mVMwSHpy-_ajg0z5N8_hJDIHrCmGNC5EA/exec?action=dashboard",
+      "url": "https://script.google.com/macros/s/AKfycbwa2PeQphOReUb88Kj4nUb5V6TybV8jIGKv_oIqsNUD0P2RHaSog8cRUcn1TgK42KKZMQ/exec?action=dashboard",
       "icons": [
         { 
           "src": "https://i.ibb.co.com/qMvmKCkH/aspire.png", 
@@ -84,7 +84,7 @@
       "name": "📋 Daftar Laporan",
       "short_name": "Daftar",
       "description": "Lihat daftar laporan aduan",
-      "url": "https://script.google.com/macros/s/AKfycbzDdngEWL1wRX5LYyyQCkrntUpvvyp7gJVT1mVMwSHpy-_ajg0z5N8_hJDIHrCmGNC5EA/exec?action=list",
+      "url": "https://script.google.com/macros/s/AKfycbwa2PeQphOReUb88Kj4nUb5V6TybV8jIGKv_oIqsNUD0P2RHaSog8cRUcn1TgK42KKZMQ/exec?action=list",
       "icons": [
         { 
           "src": "https://i.ibb.co.com/qMvmKCkH/aspire.png", 
@@ -96,7 +96,7 @@
       "name": "📈 Analytics",
       "short_name": "Analytics",
       "description": "Lihat analytics & prediction",
-      "url": "https://script.google.com/macros/s/AKfycbzDdngEWL1wRX5LYyyQCkrntUpvvyp7gJVT1mVMwSHpy-_ajg0z5N8_hJDIHrCmGNC5EA/exec?action=analytics",
+      "url": "https://script.google.com/macros/s/AKfycbwa2PeQphOReUb88Kj4nUb5V6TybV8jIGKv_oIqsNUD0P2RHaSog8cRUcn1TgK42KKZMQ/exec?action=analytics",
       "icons": [
         { 
           "src": "https://i.ibb.co.com/qMvmKCkH/aspire.png", 
