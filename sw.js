@@ -1,6 +1,6 @@
 // ==================== SERVICE WORKER - ASPIRE v2.0 ====================
 const CACHE_NAME = 'aspire-v2.0';
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbwa2PeQphOReUb88Kj4nUb5V6TybV8jIGKv_oIqsNUD0P2RHaSog8cRUcn1TgK42KKZMQ/exec;
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbwa2PeQphOReUb88Kj4nUb5V6TybV8jIGKv_oIqsNUD0P2RHaSog8cRUcn1TgK42KKZMQ/exec';
 
 // 🔥 STATIC ASSETS (HANYA UNTUK HALAMAN REDIRECT)
 const STATIC_ASSETS = [
@@ -9,13 +9,10 @@ const STATIC_ASSETS = [
     './manifest.json',
     'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
-    'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js'
-    'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js',
-    // 🔥 TAMBAHKAN FAVICON/LOGO
+    'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js',  // 🔥 FIX: Added missing comma
     'https://i.ibb.co.com/qMvmKCkH/aspire.png'
 ];
 
-// Install Service Worker
 // 🔥 OFFLINE FALLBACK PAGE (HTML)
 const OFFLINE_PAGE = `
 <!DOCTYPE html>
@@ -94,7 +91,6 @@ const OFFLINE_PAGE = `
         </div>
     </div>
     <script>
-        // Coba refresh otomatis saat koneksi kembali
         window.addEventListener('online', function() {
             location.reload();
         });
@@ -109,19 +105,15 @@ self.addEventListener('install', event => {
         caches.open(CACHE_NAME)
             .then(cache => {
                 console.log('✅ Caching static assets...');
-                // Cache static assets
                 return cache.addAll(STATIC_ASSETS);
             })
-            .then(() => self.skipWaiting())
             .then(() => {
                 // 🔥 CACHE OFFLINE PAGE
+                const response = new Response(OFFLINE_PAGE, {
+                    headers: { 'Content-Type': 'text/html' }
+                });
                 return caches.open(CACHE_NAME)
-                    .then(cache => {
-                        const response = new Response(OFFLINE_PAGE, {
-                            headers: { 'Content-Type': 'text/html' }
-                        });
-                        return cache.put('/offline', response);
-                    });
+                    .then(cache => cache.put('/offline', response));
             })
             .then(() => {
                 console.log('✅ Service Worker installed successfully');
@@ -130,16 +122,18 @@ self.addEventListener('install', event => {
     );
 });
 
-// Activate Service Worker
 // ==================== ACTIVATE ====================
 self.addEventListener('activate', event => {
     event.waitUntil(
         caches.keys().then(cacheNames => {
-@@ -32,40 +139,79 @@ self.addEventListener('activate', event => {
+            return Promise.all(
+                cacheNames.map(cacheName => {
+                    if (cacheName !== CACHE_NAME) {
+                        console.log('🗑️ Deleting old cache:', cacheName);
+                        return caches.delete(cacheName);
                     }
                 })
             );
-        }).then(() => self.clients.claim())
         }).then(() => {
             console.log('✅ Service Worker activated');
             return self.clients.claim();
@@ -147,23 +141,17 @@ self.addEventListener('activate', event => {
     );
 });
 
-// Fetch Strategy: Network First, Fallback to Cache
 // ==================== FETCH ====================
 self.addEventListener('fetch', event => {
     const request = event.request;
     const url = new URL(request.url);
 
-    // Skip non-GET requests
     // 🔥 SKIP: Non-GET requests
     if (request.method !== 'GET') {
         event.respondWith(fetch(request));
         return;
     }
 
-    // Skip external resources like maps.googleapis.com
-    if (request.url.includes('maps.googleapis.com') || 
-        request.url.includes('wasenderapi.com') ||
-        request.url.includes('i.ibb.co.com')) {
     // 🔥 SKIP: External APIs (maps, wasenderapi, image hosting)
     if (url.hostname.includes('maps.googleapis.com') || 
         url.hostname.includes('wasenderapi.com') ||
@@ -211,15 +199,6 @@ self.addEventListener('fetch', event => {
     event.respondWith(
         fetch(request)
             .then(response => {
-                // Clone response for caching
-                const responseClone = response.clone();
-                caches.open(CACHE_NAME)
-                    .then(cache => {
-                        if (request.url.startsWith('https://script.google.com')) {
-                            return;
-                        }
-                        cache.put(request, responseClone);
-                    });
                 // Cache successful responses
                 if (response && response.status === 200) {
                     const responseClone = response.clone();
@@ -231,13 +210,11 @@ self.addEventListener('fetch', event => {
                 return response;
             })
             .catch(() => {
-@@ -74,9 +220,10 @@ self.addEventListener('fetch', event => {
+                return caches.match(request)
+                    .then(cachedResponse => {
                         if (cachedResponse) {
                             return cachedResponse;
                         }
-                        // Fallback for offline pages
-                        if (request.headers.get('accept').includes('text/html')) {
-                            return caches.match('./');
                         // 🔥 HTML FALLBACK
                         if (request.headers.get('accept') && 
                             request.headers.get('accept').includes('text/html')) {
@@ -245,37 +222,40 @@ self.addEventListener('fetch', event => {
                         }
                         return new Response('Offline - Content not available', {
                             status: 503,
-@@ -87,18 +234,20 @@ self.addEventListener('fetch', event => {
+                            statusText: 'Service Unavailable'
+                        });
+                    });
+            })
     );
 });
 
-// Handle push notifications
 // ==================== PUSH NOTIFICATION ====================
 self.addEventListener('push', event => {
     let data = {
-        title: 'ASPIRE Notification',
-        body: 'Ada update baru di sistem aduan',
         title: '🔔 ASPIRE Notification',
         body: '📋 Ada update baru di sistem aduan',
         icon: 'https://i.ibb.co.com/qMvmKCkH/aspire.png',
-        badge: 'https://i.ibb.co.com/qMvmKCkH/aspire.png'
         badge: 'https://i.ibb.co.com/qMvmKCkH/aspire.png',
         url: './'
     };
 
     if (event.data) {
         try {
-            data = event.data.json();
             const parsed = event.data.json();
             data = { ...data, ...parsed };
         } catch (e) {
             data.body = event.data.text();
         }
-@@ -115,23 +264,49 @@ self.addEventListener('push', event => {
+    }
+
+    const options = {
+        body: data.body,
+        icon: data.icon,
+        badge: data.badge,
+        data: { url: data.url },
         actions: [
             { action: 'open', title: '📋 Buka Aplikasi' },
             { action: 'close', title: '✖ Tutup' }
-        ]
         ],
         requireInteraction: true
     };
@@ -285,7 +265,6 @@ self.addEventListener('push', event => {
     );
 });
 
-// Handle notification click
 // ==================== NOTIFICATION CLICK ====================
 self.addEventListener('notificationclick', event => {
     event.notification.close();
@@ -298,7 +277,6 @@ self.addEventListener('notificationclick', event => {
     const urlToOpen = event.notification.data?.url || './';
     
     event.waitUntil(
-        clients.openWindow('./')
         clients.matchAll({ type: 'window', includeUncontrolled: true })
             .then(windowClients => {
                 // Cari tab yang sudah terbuka
@@ -314,7 +292,6 @@ self.addEventListener('notificationclick', event => {
                 }
             })
     );
-});
 });
 
 // ==================== MESSAGE HANDLER ====================
