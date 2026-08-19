@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>ASPIRE - Sistem Informasi Pengelola Aduan DPU Semarang</title>
+    <title>ASPIRE - Aduan, Sarana, Prasarana, Infrastruktur, Responsif, Efektif/title>
     
     <!-- PWA META TAGS -->
     <link rel="manifest" href="./manifest.json">
-    <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
-    <link rel="apple-touch-icon" href="./icons/icon-192.png">
     <meta name="theme-color" content="#4F46E5">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -17,7 +15,7 @@
     <meta name="application-name" content="ASPIRE">
     <meta name="msapplication-starturl" content="/">
     <meta name="msapplication-TileColor" content="#4F46E5">
-    <meta name="msapplication-TileImage" content="./icons/icon-192.png">
+    <meta name="msapplication-TileImage" content="https://i.ibb.co.com/qMvmKCkH/aspire.png">
     
     <!-- FONT & ICON -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
@@ -212,7 +210,57 @@
             0%, 100% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.5; transform: scale(0.8); }
         }
-        
+
+        /* ACTION BUTTONS */
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+        .btn-primary, .btn-secondary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px 24px;
+            border: none;
+            border-radius: 16px;
+            font-size: 15px;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #4F46E5, #7C3AED);
+            color: white;
+            box-shadow: 0 8px 24px rgba(79,70,229,0.35);
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(79,70,229,0.45); }
+        .btn-primary:active { transform: scale(0.97); }
+        .btn-primary:disabled { opacity: 0.7; cursor: default; transform: none; }
+        .btn-secondary {
+            background: #EEF2FF;
+            color: #4F46E5;
+            border: 1.5px solid #C7D2FE;
+        }
+        .btn-secondary:hover { background: #E0E7FF; transform: translateY(-2px); }
+        .btn-secondary:active { transform: scale(0.97); }
+        .installed-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #ECFDF5;
+            color: #059669;
+            padding: 8px 16px;
+            border-radius: 60px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
         /* PROGRESS BAR */
         .progress-container { margin-top: 24px; }
         .progress-bar-bg {
@@ -411,10 +459,7 @@
 </head>
 <body>
 
-    <!-- APP IFRAME (menjaga origin tetap di sini agar icon taskbar tidak berubah) -->
-    <iframe id="appFrame" title="ASPIRE App" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; border:none; z-index:999; background:#0F172A;"></iframe>
-
-
+    <!-- SPLASH SCREEN -->
     <div class="splash-screen" id="splashScreen">
         <img src="https://i.ibb.co.com/qMvmKCkH/aspire.png" alt="ASPIRE">
         <h1>ASPIRE</h1>
@@ -492,8 +537,23 @@
                 </div>
             </div>
 
+            <!-- INSTALLED BADGE (muncul jika sudah terinstall) -->
+            <div class="installed-badge" id="installedBadge" style="display:none;">
+                <i class="fas fa-check-circle"></i> Sudah Terinstal
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div class="action-buttons">
+                <button class="btn-primary" id="openAppBtn" onclick="openApp()">
+                    <i class="fas fa-rocket"></i> Buka Aplikasi
+                </button>
+                <button class="btn-secondary" id="installMainBtn" onclick="installApp()">
+                    <i class="fas fa-download"></i> Instal Aplikasi
+                </button>
+            </div>
+
             <!-- PROGRESS BAR -->
-            <div class="progress-container">
+            <div class="progress-container" id="progressContainer" style="display:none;">
                 <div class="progress-bar-bg">
                     <div class="progress-bar-fill" id="progressFill"></div>
                 </div>
@@ -560,6 +620,15 @@
             }
         }, 2500);
 
+        // Buka aplikasi - dipicu tombol "Buka Aplikasi"
+        function openApp() {
+            var progressContainer = document.getElementById('progressContainer');
+            var openAppBtn = document.getElementById('openAppBtn');
+            if (progressContainer) progressContainer.style.display = 'block';
+            if (openAppBtn) openAppBtn.disabled = true;
+            startRedirect();
+        }
+
         // Start redirect with progress
         function startRedirect() {
             var progressFill = document.getElementById('progressFill');
@@ -588,53 +657,30 @@
             }, 350);
             
             setTimeout(function() {
-                var frame = document.getElementById('appFrame');
-                frame.src = TARGET_URL;
-                frame.style.display = 'block';
-                document.querySelector('.container').style.display = 'none';
-                document.querySelector('.semarang-bg').style.display = 'none';
+                window.location.href = TARGET_URL;
             }, REDIRECT_DELAY);
         }
 
-        // Install banner
-        var childRef = null;
-        var childOrigin = null;
+        // ==================== INSTALL HANDLING ====================
+        var installMainBtn = document.getElementById('installMainBtn');
+        var installedBadge = document.getElementById('installedBadge');
 
-        function notifyChildInstallStatus(available) {
-            if (childRef) {
-                try { childRef.postMessage({ type: 'ASPIRE_INSTALL_STATUS', available: available }, childOrigin); } catch (e) {}
-            }
+        // Jika sudah berjalan sebagai app terinstall, sembunyikan tombol instal
+        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+            if (installMainBtn) installMainBtn.style.display = 'none';
+            if (installedBadge) installedBadge.style.display = 'inline-flex';
         }
 
         window.addEventListener('beforeinstallprompt', function(e) {
             e.preventDefault();
             window.deferredPrompt = e;
-            promptShown = true;
-            clearTimeout(redirectTimer); // hold off the redirect while the banner is up
             document.getElementById('installBanner').classList.add('show');
-            notifyChildInstallStatus(true);
         });
 
         window.addEventListener('appinstalled', function() {
-            window.deferredPrompt = null;
-            notifyChildInstallStatus(false);
-        });
-
-        // Bridge: the login page runs inside the iframe (a different origin), so it
-        // asks this top window whether install is available, and asks this window
-        // to trigger the native prompt on its behalf.
-        window.addEventListener('message', function(event) {
-            if (!event.data || typeof event.data !== 'object') return;
-            if (event.data.type === 'ASPIRE_REQUEST_INSTALL_STATUS') {
-                childRef = event.source;
-                childOrigin = event.origin;
-                notifyChildInstallStatus(!!window.deferredPrompt);
-            }
-            if (event.data.type === 'ASPIRE_TRIGGER_INSTALL') {
-                childRef = event.source;
-                childOrigin = event.origin;
-                installApp();
-            }
+            if (installMainBtn) installMainBtn.style.display = 'none';
+            if (installedBadge) installedBadge.style.display = 'inline-flex';
+            document.getElementById('installBanner').classList.remove('show');
         });
 
         function installApp() {
@@ -646,33 +692,22 @@
                     }
                     window.deferredPrompt = null;
                     document.getElementById('installBanner').classList.remove('show');
-                    notifyChildInstallStatus(false);
-                    scheduleRedirect(800);
                 });
+            } else {
+                var isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+                var msg = '📱 Cara instal ASPIRE:\n\n';
+                if (isIOS) {
+                    msg += '1. Buka di Safari\n2. Tap ikon Share (kotak dengan panah ke atas)\n3. Pilih "Tambahkan ke Layar Utama"\n4. Tap "Tambahkan"';
+                } else {
+                    msg += '1. Buka menu browser (⋮ di pojok kanan atas)\n2. Pilih "Tambahkan ke Layar Utama" atau "Install App"\n3. Konfirmasi instalasi';
+                }
+                alert(msg);
             }
         }
 
         function closeInstallBanner() {
             document.getElementById('installBanner').classList.remove('show');
-            scheduleRedirect(300);
         }
-
-        // Check for no-redirect param
-        var urlParams = new URLSearchParams(window.location.search);
-        var noRedirect = urlParams.get('no-redirect');
-        var redirectTimer = null;
-        var promptShown = false;
-
-        function scheduleRedirect(delay) {
-            if (noRedirect === 'true') return;
-            clearTimeout(redirectTimer);
-            redirectTimer = setTimeout(function() {
-                startRedirect();
-            }, delay);
-        }
-
-        // Auto redirect (delayed a bit longer to give beforeinstallprompt a chance to fire)
-        scheduleRedirect(2500);
 
         // ==================== SERVICE WORKER REGISTRATION ====================
         if ('serviceWorker' in navigator) {
