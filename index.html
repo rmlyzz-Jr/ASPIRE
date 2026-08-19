@@ -7,6 +7,8 @@
     
     <!-- PWA META TAGS -->
     <link rel="manifest" href="./manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+    <link rel="apple-touch-icon" href="./icons/icon-192.png">
     <meta name="theme-color" content="#4F46E5">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -15,7 +17,7 @@
     <meta name="application-name" content="ASPIRE">
     <meta name="msapplication-starturl" content="/">
     <meta name="msapplication-TileColor" content="#4F46E5">
-    <meta name="msapplication-TileImage" content="https://i.ibb.co.com/qMvmKCkH/aspire.png">
+    <meta name="msapplication-TileImage" content="./icons/icon-192.png">
     
     <!-- FONT & ICON -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
@@ -591,6 +593,8 @@
         window.addEventListener('beforeinstallprompt', function(e) {
             e.preventDefault();
             window.deferredPrompt = e;
+            promptShown = true;
+            clearTimeout(redirectTimer); // hold off the redirect while the banner is up
             document.getElementById('installBanner').classList.add('show');
         });
 
@@ -603,24 +607,32 @@
                     }
                     window.deferredPrompt = null;
                     document.getElementById('installBanner').classList.remove('show');
+                    scheduleRedirect(800);
                 });
             }
         }
 
         function closeInstallBanner() {
             document.getElementById('installBanner').classList.remove('show');
+            scheduleRedirect(300);
         }
 
         // Check for no-redirect param
         var urlParams = new URLSearchParams(window.location.search);
         var noRedirect = urlParams.get('no-redirect');
+        var redirectTimer = null;
+        var promptShown = false;
 
-        // Auto redirect
-        if (noRedirect !== 'true') {
-            setTimeout(function() {
+        function scheduleRedirect(delay) {
+            if (noRedirect === 'true') return;
+            clearTimeout(redirectTimer);
+            redirectTimer = setTimeout(function() {
                 startRedirect();
-            }, 1500);
+            }, delay);
         }
+
+        // Auto redirect (delayed a bit longer to give beforeinstallprompt a chance to fire)
+        scheduleRedirect(2500);
 
         // ==================== SERVICE WORKER REGISTRATION ====================
         if ('serviceWorker' in navigator) {
