@@ -55,7 +55,8 @@
             background: linear-gradient(135deg, rgba(15,23,42,0.88) 0%, rgba(30,41,59,0.92) 100%); 
             z-index: 1; 
         }
-        .semarang-bg img { 
+        .semarang-bg img,
+        .semarang-bg video { 
             width: 100%; 
             height: 100%; 
             object-fit: cover; 
@@ -484,7 +485,10 @@
 
     <!-- BACKGROUND -->
     <div class="semarang-bg">
-        <img src="https://i.ibb.co.com/jkRTyt5P/Chat-GPT-Image-Aug-19-2026-02-02-52-PM.png" alt="Kota Semarang">
+        <video autoplay muted loop playsinline poster="https://i.ibb.co.com/jkRTyt5P/Chat-GPT-Image-Aug-19-2026-02-02-52-PM.png" id="bgVideo" onerror="handleBgVideoError()">
+            <source src="https://cdn.pixabay.com/video/2026/08/19/371357.mp4" type="video/mp4">
+        </video>
+        <img src="https://i.ibb.co.com/jkRTyt5P/Chat-GPT-Image-Aug-19-2026-02-02-52-PM.png" alt="Kota Semarang" id="bgFallbackImg" style="display:none;">
         <div class="city-name">SEMARANG</div>
     </div>
 
@@ -619,6 +623,14 @@
                 splash.style.display = 'none';
             }
         }, 2500);
+
+        // Fallback: tampilkan gambar jika video background gagal dimuat
+        function handleBgVideoError() {
+            var video = document.getElementById('bgVideo');
+            var fallbackImg = document.getElementById('bgFallbackImg');
+            if (video) video.style.display = 'none';
+            if (fallbackImg) fallbackImg.style.display = 'block';
+        }
 
         // Buka aplikasi - dipicu tombol "Buka Aplikasi"
         function openApp() {
