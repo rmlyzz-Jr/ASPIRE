@@ -3,7 +3,7 @@ const CACHE_NAME = 'aspire-v2.0';
 const TARGET_URL = 'https://script.google.com/macros/s/AKfycbwIiMlTwyt74TwkV6wj6sIqJskMuUrO2U7cpkYqKPjE29WZtTMY_aeWPrnz1LEpmPla3w/exec';
 const GAS_URL = TARGET_URL;
 
-// 🔥 STATIC ASSETS (HANYA UNTUK HALAMAN REDIRECT)
+// 🔥 STATIC ASSETS (HANYA UNTUK HALAMAN REDIRECT) 
 const STATIC_ASSETS = [
     './',
     './index.html',
