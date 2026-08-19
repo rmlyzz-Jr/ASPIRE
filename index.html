@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>ASPIRE - Sistem Informasi Pengelola Aduan DPU Semarang</title>
     
-    <!-- PWA META TAGS --> 
+    <!-- PWA META TAGS -->
     <link rel="manifest" href="./manifest.json">
     <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
     <link rel="apple-touch-icon" href="./icons/icon-192.png">
@@ -411,7 +411,10 @@
 </head>
 <body>
 
-    <!-- SPLASH SCREEN -->
+    <!-- APP IFRAME (menjaga origin tetap di sini agar icon taskbar tidak berubah) -->
+    <iframe id="appFrame" title="ASPIRE App" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; border:none; z-index:999; background:#0F172A;"></iframe>
+
+
     <div class="splash-screen" id="splashScreen">
         <img src="https://i.ibb.co.com/qMvmKCkH/aspire.png" alt="ASPIRE">
         <h1>ASPIRE</h1>
@@ -585,7 +588,11 @@
             }, 350);
             
             setTimeout(function() {
-                window.location.href = TARGET_URL;
+                var frame = document.getElementById('appFrame');
+                frame.src = TARGET_URL;
+                frame.style.display = 'block';
+                document.querySelector('.container').style.display = 'none';
+                document.querySelector('.semarang-bg').style.display = 'none';
             }, REDIRECT_DELAY);
         }
 
