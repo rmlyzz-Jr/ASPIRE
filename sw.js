@@ -8,9 +8,12 @@ const STATIC_ASSETS = [
     './',
     './index.html',
     './manifest.json',
+    './icons/icon-192.png',
+    './icons/icon-512.png',
+    './icons/icon-maskable-192.png',
+    './icons/icon-maskable-512.png',
     'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap',
-    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
-    'https://i.ibb.co.com/qMvmKCkH/aspire.png'
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'
 ];
 
 // 🔥 OFFLINE FALLBACK PAGE (HTML)
@@ -80,7 +83,7 @@ const OFFLINE_PAGE = `
 <body>
     <div class="card">
         <div class="icon">📡</div>
-        <img src="https://i.ibb.co.com/qMvmKCkH/aspire.png" alt="ASPIRE">
+        <img src="./icons/icon-192.png" alt="ASPIRE">
         <h1>ASPIRE</h1>
         <p>Anda sedang offline. Silakan periksa koneksi internet Anda untuk mengakses aplikasi.</p>
         <button class="btn" onclick="location.reload()">
