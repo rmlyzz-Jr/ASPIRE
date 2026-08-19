@@ -597,12 +597,44 @@
         }
 
         // Install banner
+        var childRef = null;
+        var childOrigin = null;
+
+        function notifyChildInstallStatus(available) {
+            if (childRef) {
+                try { childRef.postMessage({ type: 'ASPIRE_INSTALL_STATUS', available: available }, childOrigin); } catch (e) {}
+            }
+        }
+
         window.addEventListener('beforeinstallprompt', function(e) {
             e.preventDefault();
             window.deferredPrompt = e;
             promptShown = true;
             clearTimeout(redirectTimer); // hold off the redirect while the banner is up
             document.getElementById('installBanner').classList.add('show');
+            notifyChildInstallStatus(true);
+        });
+
+        window.addEventListener('appinstalled', function() {
+            window.deferredPrompt = null;
+            notifyChildInstallStatus(false);
+        });
+
+        // Bridge: the login page runs inside the iframe (a different origin), so it
+        // asks this top window whether install is available, and asks this window
+        // to trigger the native prompt on its behalf.
+        window.addEventListener('message', function(event) {
+            if (!event.data || typeof event.data !== 'object') return;
+            if (event.data.type === 'ASPIRE_REQUEST_INSTALL_STATUS') {
+                childRef = event.source;
+                childOrigin = event.origin;
+                notifyChildInstallStatus(!!window.deferredPrompt);
+            }
+            if (event.data.type === 'ASPIRE_TRIGGER_INSTALL') {
+                childRef = event.source;
+                childOrigin = event.origin;
+                installApp();
+            }
         });
 
         function installApp() {
@@ -614,6 +646,7 @@
                     }
                     window.deferredPrompt = null;
                     document.getElementById('installBanner').classList.remove('show');
+                    notifyChildInstallStatus(false);
                     scheduleRedirect(800);
                 });
             }
